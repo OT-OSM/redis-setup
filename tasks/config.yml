@@ -1,0 +1,107 @@
+---
+
+
+  - name: create redis group
+    group:
+      name: "{{redis_group}}"
+      state: present
+
+  - name: create redis user
+    user:
+      name: "{{ redis_user }}"
+      group: "{{ redis_group }}"
+      shell: /bin/bash
+      createhome: no
+
+#Download and unarchive redis
+  - name: download redis src
+    unarchive:
+       src: "http://download.redis.io/releases/redis-{{redis_version}}.tar.gz"
+       copy: no
+       dest: "{{ redis_path }}"
+       mode: 0755
+       owner: root
+       creates: "{{redis_path}}/redis-{{redis_version}}"
+
+#Check for file to skip make
+  - name: Check file if already make
+    stat: path="{{redis_path}}/redis-{{redis_version}}/src/dict.o"
+    register: content
+
+#Compile Redis
+  - name: make redis
+    make:
+       chdir: "{{redis_path}}/redis-{{redis_version}}"
+    when: not content.stat.exists
+
+#Check if binaries already installed
+  - name: Check file if already installed
+    stat: path="/usr/local/bin/redis-server"
+    register: content1
+
+
+#Install Redis binaries
+  - name: Install redis
+    make:
+       chdir: "{{redis_path}}/redis-{{redis_version}}"
+       target: install
+    when: not content1.stat.exists
+
+
+
+#create directories
+  - name: create /etc/redis, data, logs, and socket directories
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: "{{redis_user}}"
+      group: "{{redis_group}}"
+      mode: 0770
+    with_items:
+        - /etc/redis
+        - /var/lib/redis
+        - /var/log/redis
+    
+
+#Create log file
+  - name: create log file
+    copy:
+      dest: "/var/log/redis/redis.log"
+      content: ""
+      owner: "{{redis_user}}"
+      group: "{{redis_group}}"
+      mode: 0770
+      force: no
+
+
+  - name: Copy redis.conf
+    template:
+      src: templates/redis.conf.j2
+      dest: /etc/redis/redis.conf
+
+
+
+#configure service for all distribution except rhel 6
+  - name: create redis-as-a-service
+    template: src=templates/redis.service.j2
+              dest=/etc/systemd/system/redis.service
+              owner=root
+              group=root
+              mode=0644
+    notify:
+        - start redis
+    when: not ansible_distribution_major_version=='6'
+
+
+#configure service
+  - name: create redis-as-a-service
+    copy:
+      src: files/redis
+      dest: /etc/init.d/redis
+      owner: root
+      group: root
+      mode: 0770
+      force: no
+    notify:
+      - start redis redhat6
+    when: ansible_distribution_major_version=='6'
