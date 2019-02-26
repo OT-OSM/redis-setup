@@ -1,14 +1,10 @@
 ---
-# handlers file for redis
-
-
   - name: start redis
     systemd: 
       state: started
       daemon_reload: yes
       name: redis
       enabled: yes
-
   - name: start redis redhat6
     service:
       name: redis
