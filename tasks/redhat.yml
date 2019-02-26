@@ -1,13 +1,12 @@
 ---
-
-    - name: install required packages
-      yum: 
-       name: "{{ item }}"
-       state: present
-       update_cache: yes
-      with_items:
-         - gcc
-         - gcc-c++
-         - tcl
-         - make
-         - libselinux-python
+  - name: install required packages
+    yum: 
+      name: "{{ item }}"
+      state: present
+      update_cache: yes
+    with_items:
+      - gcc
+      - gcc-c++
+      - tcl
+      - make
+      - libselinux-python
