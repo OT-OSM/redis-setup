@@ -1,0 +1,8 @@
+---
+- name: Restart Redis
+  systemd:
+    name: redis.service
+    enabled: yes
+    state: started
+    daemon_reload: yes
+  become: true

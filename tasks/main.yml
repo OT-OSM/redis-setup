@@ -1,0 +1,9 @@
+---
+- name: Installation of Redis on Redhat
+  include: redhat.yml 
+  when: ansible_os_family == 'RedHat'
+
+- name: setup redis.conf and redis.service file
+  include: redis_service.yml
+  when: ansible_os_family == 'RedHat'
+
