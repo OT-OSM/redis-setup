@@ -179,8 +179,8 @@ remi_repo_url: "http://rpms.remirepo.net/enterprise/remi-release-{{ ansible_dist
 Variables in var/main.yml
 -----------------
 To override, default value of variables defined in default/main.yml <br />
-| Varibale | Value |
-| :------- | :---: |
+| Varible | Value |
+| :-------: | :---: |
 |redis_port | 7000  |
 |redis_bind | ansible_ssh_host |
 |redis_conf_file_location| /etc/redis/cluster |
