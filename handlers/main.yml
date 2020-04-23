@@ -1,13 +1,8 @@
 ---
-  - name: start redis
-    systemd: 
-      state: started
-      daemon_reload: yes
-      name: redis
-      enabled: yes
-  - name: start redis redhat6
-    service:
-      name: redis
-      state: started
-      enabled: yes
-
+- name: Restart Redis
+  systemd:
+    name: redis.service
+    enabled: yes
+    state: started
+    daemon_reload: yes
+  become: true

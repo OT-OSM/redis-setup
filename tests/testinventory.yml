@@ -1,0 +1,11 @@
+# [redis-nodes]
+# #13.232.126.40 ansible_user=ec2-user ansible_ssh_private_key_file=/home/opstree/Downloads/rediskeys.pem
+# node1 ansible_ssh_host=192.168.0.185 ansible_user=vagrant ansible_ssh_pass=vagrant
+# node2 ansible_ssh_host=192.168.0.186 ansible_user=vagrant ansible_ssh_pass=vagrant
+# node3 ansible_ssh_host=192.168.0.187 ansible_user=vagrant ansible_ssh_pass=vagrant
+# node4 ansible_ssh_host=192.168.0.188 ansible_user=vagrant ansible_ssh_pass=vagrant
+# node5 ansible_ssh_host=192.168.0.176 ansible_user=vagrant ansible_ssh_pass=vagrant
+# node6 ansible_ssh_host=192.168.0.191 ansible_user=vagrant ansible_ssh_pass=vagrant
+
+# [link-cluster]
+# node1

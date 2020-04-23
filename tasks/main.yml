@@ -1,16 +1,9 @@
 ---
-  - name: Install Redis on Debian
-    include: debian.yml
-    when: ansible_os_family == 'Debian'
+- name: Installation of Redis on Redhat
+  include: redhat.yml 
+  when: ansible_os_family == 'RedHat'
 
-  - name: Install Redis on RedHat
-    include: redhat.yml
-    when: ansible_os_family == 'RedHat'
-
-  - name: Configure Redis Common tasks
-    include: config.yml
-
-
-
-
+- name: setup redis.conf and redis.service file
+  include: redis_service.yml
+  when: ansible_os_family == 'RedHat'
 

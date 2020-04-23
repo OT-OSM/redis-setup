@@ -1,12 +1,43 @@
 ---
-  - name: install required packages
-    yum: 
-      name: "{{ item }}"
+  - name: Ensure SELinux Disable
+    selinux:
+      state: disabled
+
+  - name: 1.Check if EPEL repo is already configured.
+    stat: path={{ epel_repofile_path }}
+    register: epel_repofile_result
+ 
+  - name: 2.Install EPEL repo.
+    yum:
+     name: "{{ epel_repo_url }}"
+     state: present
+    register: result
+    when: not epel_repofile_result.stat.exists
+ 
+  - name: 3.Import EPEL GPG key.
+    rpm_key:
+     key: "{{ epel_repo_gpg_key_url }}"
+     state: present
+    when: not epel_repofile_result.stat.exists
+
+
+  - name: Install remi repo.
+    yum:
+      name: "{{ remi_repo_url }}"
       state: present
-      update_cache: yes
-    with_items:
-      - gcc
-      - gcc-c++
-      - tcl
-      - make
-      - libselinux-python
+
+  # - name: Import remi GPG key.
+  #   rpm_key:
+  #     key: "{{ remi_repo_gpg_key_url }}"
+  #     state: present
+
+
+  - name: Install redis
+    yum:
+      name: redis
+      enablerepo: remi
+      state: present
+  
+
+  
+

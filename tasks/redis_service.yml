@@ -1,0 +1,24 @@
+---
+
+- name: create "{{redis_conf_file_location}}" directory
+  file:
+    path: "{{redis_conf_file_location}}"
+    state: directory
+    recurse: yes
+    owner: redis
+    group: root
+
+- name: Copy redis.conf
+  template: 
+   src: redis.conf.j2 
+   dest: "{{ redis_conf_file_location }}/redis.conf"
+   owner: redis 
+   group: root
+  
+- name: Copy redis.service file  
+  template: 
+    src: redis.service.j2
+    dest: "/usr/lib/systemd/system/redis.service"
+    owner: root 
+    group: root
+  notify: Restart Redis
