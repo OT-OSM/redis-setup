@@ -1,0 +1,70 @@
+---
+- name: Download redis artifact
+  unarchive:
+    src: "http://download.redis.io/releases/redis-{{ redis_version }}.tar.gz"
+    dest: /opt/
+    remote_src: yes
+
+- name: Build runtime dependencies for redis
+  make:
+    chdir: /opt/redis-{{ redis_version }}
+
+- name: Install redis server
+  make:
+    chdir: /opt/redis-{{ redis_version }}
+    target: install
+
+- name: Creating group for redis
+  group:
+    name: "redis"
+    state: present
+
+- name: Creating system user for redis
+  user:
+    name: "redis"
+    group: "redis"
+    shell: /sbin/nologin
+    password: "!!"
+    createhome: no
+    system: yes
+    state: present
+
+- name: Creating logfile directory
+  file:
+    path: "/var/log/redis"
+    state: directory
+    recurse: yes
+    owner: redis
+    group: redis
+
+- name: Creating redis data directory
+  file:
+    path: "{{ redis_dir }}"
+    state: directory
+    recurse: yes
+    owner: redis
+    group: redis
+
+- name: create "{{ redis_conf_file_location }}" directory
+  file:
+    path: "{{ redis_conf_file_location }}"
+    state: directory
+    recurse: yes
+    owner: redis
+    group: redis
+
+- name: Copy redis.conf
+  template: 
+    src: redis.conf.j2 
+    dest: "{{ redis_conf_file_location }}/redis.conf"
+    owner: redis 
+    group: redis
+  notify: Restart Redis
+
+- name: Copy redis.service file  
+  template: 
+    src: redis.service.j2
+    dest: "/etc/systemd/system/redis.service"
+    owner: root 
+    group: root
+  notify: Restart Redis

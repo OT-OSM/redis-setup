@@ -1,5 +1,4 @@
 ---
-
 # redis_nodeip_port_list: "{{ groups['cluster'] | map('extract', hostvars, ['ansible_ssh_host']) | join(':3000 ') }}:3000"
 
 ############## redis.conf variable###################
@@ -16,7 +15,6 @@ redis_loglevel: notice
 redis_logfile: "/var/log/redis/redis.log"
 
 ##### CLUSTER
-redis_cluster_enabled: "yes"
 # redis_cluster_replicas: 0
 redis_cluster_node_timeout: 5000
 redis_cluster_config_file: /etc/redis/cluster/nodes.conf
@@ -63,7 +61,6 @@ redis_maxmemory_policy: noeviction
 
 ###### NETWORKING/CONNECTION OPTIONS
 redis_bind: "{{ ansible_ssh_host }}"
-redis_port: 7000
 redis_tcp_backlog: 511
 redis_tcp_keepalive: 0
 redis_protected_mode: "no"
@@ -73,8 +70,7 @@ redis_timeout: 0
 redis_socket_path: false
 redis_socket_perm: 755
 
-
-############## redis.conf variable###################
+############## Redis.conf variable###################
 redis_conf_file_location: /etc/redis/cluster
 redis_runtime_directory: redis
 
@@ -85,3 +81,7 @@ epel_repofile_path: "/etc/yum.repos.d/epel.repo"
 
 ## REMI REPO
 remi_repo_url: "http://rpms.remirepo.net/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm"
+
+
+### Common Variables
+redis_version: stable

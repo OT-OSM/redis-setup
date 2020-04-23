@@ -1,0 +1,9 @@
+---
+- name: Update packages
+  apt:
+    update_cache: yes
+
+- name: Install build time dependencies
+  apt:
+    name: "build-essential"
+    state: present

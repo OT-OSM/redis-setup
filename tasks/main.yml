@@ -1,9 +1,14 @@
 ---
-- name: Installation of Redis on Redhat
+- name: Checking Pre Requisities
+  include: check-prerequisities.yml
+
+- name: Configure RedHat system to install Redis
   include: redhat.yml 
   when: ansible_os_family == 'RedHat'
 
-- name: setup redis.conf and redis.service file
-  include: redis_service.yml
-  when: ansible_os_family == 'RedHat'
+- name: Configure Debian system to install Redis
+  include: debian.yml
+  when: ansible_os_family == 'Debian'
 
+- name: Install and configure Redis
+  include: install-configure.yml
