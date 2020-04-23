@@ -8,3 +8,5 @@ redis_dir: "/var/lib/redis"
 redis_slowlog_log_slower_than: 10000
 redis_maxmemory_policy: noeviction
 cluster_enabled: true
+redis_nodeip_port_list: "{{ groups['redis-nodes'] | map('extract', hostvars, ['ansible_ssh_host']) | join(':6379 ') }}:{{ redis_port }}"
+redis_cluster_replicas: 1
