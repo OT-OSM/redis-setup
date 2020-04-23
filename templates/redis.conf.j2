@@ -1,6 +1,6 @@
 {{ ansible_managed | comment }}
 #network
-bind {{ redis_bind }}
+bind 0.0.0.0
 protected-mode {{ redis_protected_mode }}
 port {{ redis_port }}
 tcp-keepalive {{ redis_tcp_keepalive }}
@@ -10,7 +10,6 @@ timeout {{ redis_timeout }}
 unixsocket {{ redis_socket_path }}
 unixsocketperm {{ redis_socket_perm }}
 {% endif -%}
-
 
 # General
 supervised {{redis_supervised}}
@@ -23,9 +22,11 @@ logfile {{ redis_logfile }}
 
 
 #cluster
-cluster-enabled {{redis_cluster_enabled}}
+{% if cluster_enabled == true %}
+cluster-enabled yes
 cluster-node-timeout {{redis_cluster_node_timeout}}
 cluster-config-file {{redis_cluster_config_file}}
+{% endif %}
 
 # Snapshotting
 {% for save in redis_save -%}

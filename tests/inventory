@@ -1,2 +1,15 @@
-localhost
+[redis-nodes]
+ node1 ansible_ssh_host=173.230.142.155
+ node2 ansible_ssh_host=192.155.93.57
+ node3 ansible_ssh_host=172.105.155.89
+ node4 ansible_ssh_host=50.116.35.169
+ node5 ansible_ssh_host=45.79.213.77
+ node6 ansible_ssh_host=172.105.157.89
 
+[cluster-formation-node]
+ node1
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+ansible_user=root
+redis_port=6379

@@ -1,0 +1,15 @@
+---
+- hosts: redis-nodes
+  vars:
+   redis_nodeip_port_list: "{{ groups['redis-nodes'] | map('extract', hostvars, ['ansible_ssh_host']) | join(':6379 ') }}:{{ redis_port }}"
+   redis_cluster_replicas: 1
+  become: true
+  roles:
+    - osm_redis
+
+  post_tasks:
+   - name: Link the cluster together
+     command: "redis-cli --cluster create {{ redis_nodeip_port_list }}  --cluster-replicas {{ redis_cluster_replicas }}"
+     args:
+        stdin: "yes"
+     when: inventory_hostname in groups['cluster-formation-node']
