@@ -67,4 +67,6 @@
     dest: "/etc/systemd/system/redis.service"
     owner: root 
     group: root
-  notify: Restart Redis
+  notify: 
+    - Reload Redis
+    - Restart Redis

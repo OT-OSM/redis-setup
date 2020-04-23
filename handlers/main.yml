@@ -4,5 +4,7 @@
     name: redis.service
     enabled: yes
     state: started
+
+- name: Reload Redis Service
+  systemd:
     daemon_reload: yes
-  become: true
