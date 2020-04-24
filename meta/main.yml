@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Arpeet Gupta
-  description: Ansible role for setting up a production grade redis cluster or standalone setup
+  description: Ansible role to setup a production grade redis cluster/server
   company: OpsTree Solutions
 
   license: license (GPL-2.0-or-later, MIT, etc)

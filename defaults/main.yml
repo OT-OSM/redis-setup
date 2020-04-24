@@ -31,8 +31,6 @@ redis_rdbchecksum: "yes"
 redis_db_filename: "dump.rdb"
 redis_dir: "/var/lib/redis"
 
-
-
 # SLOW LOGS
 # Log queries slower than this many milliseconds. -1 to disable
 redis_slowlog_log_slower_than: 10000
@@ -51,7 +49,6 @@ redis_auto_aof_rewrite_min_size: "64mb"
 # Max connected clients at a time
 redis_maxclients: 10000
 
-
 # MEMORY MANAGEMENT 
 redis_maxmemory: false
 redis_maxmemory_policy: noeviction
@@ -63,7 +60,7 @@ redis_tcp_keepalive: 0
 redis_protected_mode: "no"
 redis_timeout: 0
 # Socket options
-# Set socket_path to the desired path to the socket. E.g. /var/run/redis/{{ redis_port }}.sock
+# Set socket_path to the desired path to the socket.
 redis_socket_path: false
 redis_socket_perm: 755
 

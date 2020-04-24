@@ -1,5 +1,6 @@
 ---
 - name: Checking redis hosts are defined or not
   fail:
-    msg: "Playbook execution failed due to missing or empty required group 'redis-nodes'"
-  when: groups['redis-nodes'] is not defined or groups['redis-nodes'] | length == 0
+    msg: "Playbook execution failed due to missing group 'redis-nodes'"
+  when: >
+        groups['redis-nodes'] is not defined or groups['redis-nodes'] | length == 0
