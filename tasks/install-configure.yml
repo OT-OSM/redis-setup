@@ -104,16 +104,18 @@
   when: inventory_hostname in groups['cluster-formation-node']
   register: command_result
 
+- name: Generic cluster create command
+  set_fact:
+    generic_cluster_command: "redis-cli --cluster create {{ redis_nodeip_port_list }}"
+
 - name: Setting fact for cluster create command without password
   set_fact:
-    cluster_create_command: >
-      "redis-cli --cluster create {{ redis_nodeip_port_list }}
-      --cluster-replicas {{ redis_cluster_replicas }} --cluster-yes"
+    cluster_create_command: "{{ generic_cluster_command  }} --cluster-replicas {{ redis_cluster_replicas }} --cluster-yes"
   when: redis_password is not defined
 
 - name: Setting fact for cluster create command with password
   set_fact:
-    cluster_create_command: "redis-cli --cluster create {{ redis_nodeip_port_list }} --cluster-replicas {{ redis_cluster_replicas }} --cluster-yes -a {{ redis_password }}"
+    cluster_create_command: "{{ generic_cluster_command  }} --cluster-replicas {{ redis_cluster_replicas }} --cluster-yes -a {{ redis_password }}"
   when: redis_password is defined
 
 - name: Create Redis Cluster
