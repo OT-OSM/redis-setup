@@ -1,9 +1,7 @@
 ---
-# redis_nodeip_port_list: "{{ groups['cluster'] | map('extract', hostvars, ['ansible_ssh_host']) | join(':3000 ') }}:3000"
+# redis.conf variables
 
-############## redis.conf variable###################
-
-##### GENERAL CONFIGURATION
+# GENERAL CONFIGURATION
 redis_supervised: "no"
 redis_always_show_logo: "yes"
 redis_daemonize: "no"
@@ -14,13 +12,12 @@ redis_loglevel: notice
 # Logging
 redis_logfile: "/var/log/redis/redis.log"
 
-##### CLUSTER
+# CLUSTER
 # redis_cluster_replicas: 0
 redis_cluster_node_timeout: 5000
 redis_cluster_config_file: /etc/redis/cluster/nodes.conf
-#############################################
 
-##### SNAPSHOTTING
+# SNAPSHOTTING
 # How frequently to snapshot the database to disk
 # e.g. "900 1" => 900 seconds if at least 1 key changed
 redis_save:
@@ -36,13 +33,13 @@ redis_dir: "/var/lib/redis"
 
 
 
-#### SLOW LOGS
+# SLOW LOGS
 # Log queries slower than this many milliseconds. -1 to disable
 redis_slowlog_log_slower_than: 10000
 # Maximum number of slow queries to save
 redis_slowlog_max_len: 128
 
-##### APPENDONLY MODE
+# APPENDONLY MODE
 redis_appendonly: "no"
 redis_appendfilename: "appendonly.aof"
 redis_appendfsync: "everysec"
@@ -50,16 +47,16 @@ redis_no_appendfsync_on_rewrite: "no"
 redis_auto_aof_rewrite_percentage: "100"
 redis_auto_aof_rewrite_min_size: "64mb"
 
-##### CLIENTS
+# CLIENTS
 # Max connected clients at a time
 redis_maxclients: 10000
 
 
-###### MEMORY MANAGEMENT 
+# MEMORY MANAGEMENT 
 redis_maxmemory: false
 redis_maxmemory_policy: noeviction
 
-###### NETWORKING/CONNECTION OPTIONS
+# NETWORKING/CONNECTION OPTIONS
 redis_bind: "{{ ansible_ssh_host }}"
 redis_tcp_backlog: 511
 redis_tcp_keepalive: 0
@@ -70,18 +67,19 @@ redis_timeout: 0
 redis_socket_path: false
 redis_socket_perm: 755
 
-############## Redis.conf variable###################
 redis_conf_file_location: /etc/redis/cluster
 redis_runtime_directory: redis
 
 # EPEL REPO
-epel_repo_url: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
-epel_repo_gpg_key_url: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+epel_repo_url: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-
+                {{ ansible_distribution_major_version }}.noarch.rpm"
+epel_repo_gpg_key_url: "https://dl.fedoraproject.org/pub/epel/
+                RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
 epel_repofile_path: "/etc/yum.repos.d/epel.repo"
 
-## REMI REPO
-remi_repo_url: "http://rpms.remirepo.net/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm"
+# REMI REPO
+remi_repo_url: "http://rpms.remirepo.net/enterprise/
+                remi-release-{{ ansible_distribution_major_version }}.rpm"
 
-
-### Common Variables
+# Common Variables
 redis_version: stable
