@@ -3,5 +3,5 @@
   fail:
     msg: "Playbook execution failed due to missing group 'redis-nodes'"
   when: >
-    groups['redis-nodes'] is not defined or 
+    groups['redis-nodes'] is not defined or
     groups['redis-nodes'] | length == 0
