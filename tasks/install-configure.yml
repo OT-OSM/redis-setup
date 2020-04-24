@@ -54,20 +54,20 @@
     group: redis
 
 - name: Copy redis.conf
-  template: 
-    src: redis.conf.j2 
+  template:
+    src: redis.conf.j2
     dest: "{{ redis_conf_file_location }}/redis.conf"
-    owner: redis 
+    owner: redis
     group: redis
   notify: Restart Redis
 
-- name: Copy redis.service file  
-  template: 
+- name: Copy redis.service file
+  template:
     src: redis.service.j2
     dest: "/etc/systemd/system/redis.service"
-    owner: root 
+    owner: root
     group: root
-  notify: 
+  notify:
     - Reload Redis
     - Restart Redis
 
@@ -77,7 +77,11 @@
   register: command_result
 
 - name: Create Redis Cluster
-  command: "redis-cli --cluster create {{ redis_nodeip_port_list }}  --cluster-replicas {{ redis_cluster_replicas }}"
+  command: >
+          "redis-cli --cluster create {{ redis_nodeip_port_list }} 
+          --cluster-replicas {{ redis_cluster_replicas }}"
   args:
     stdin: "yes"
-  when: inventory_hostname in groups['cluster-formation-node'] and command_result.stdout.split('\n')|length != groups['redis-nodes']|length
+  when: >
+        inventory_hostname in groups['cluster-formation-node'] and 
+        command_result.stdout.split('\n')|length != groups['redis-nodes']|length

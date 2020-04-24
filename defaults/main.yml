@@ -49,7 +49,7 @@ redis_auto_aof_rewrite_min_size: "64mb"
 # Max connected clients at a time
 redis_maxclients: 10000
 
-# MEMORY MANAGEMENT 
+# MEMORY MANAGEMENT
 redis_maxmemory: false
 redis_maxmemory_policy: noeviction
 
