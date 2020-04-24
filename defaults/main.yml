@@ -1,6 +1,4 @@
 ---
-# redis.conf variables
-
 # GENERAL CONFIGURATION
 redis_supervised: "no"
 redis_always_show_logo: "yes"
@@ -9,8 +7,6 @@ redis_pidfile: "/var/run/redis-{{- redis_port -}}.pid"
 # Number of databases to allow
 redis_databases: 16
 redis_loglevel: notice
-# Logging
-redis_logfile: "/var/log/redis/redis.log"
 
 # CLUSTER
 # redis_cluster_replicas: 0
@@ -29,7 +25,6 @@ redis_rdbcompression: "yes"
 redis_rdbchecksum: "yes"
 # the file name for the RDB Backup
 redis_db_filename: "dump.rdb"
-redis_dir: "/var/lib/redis"
 
 # SLOW LOGS
 # Log queries slower than this many milliseconds. -1 to disable
@@ -66,17 +61,6 @@ redis_socket_perm: 755
 
 redis_conf_file_location: /etc/redis/cluster
 redis_runtime_directory: redis
-
-# EPEL REPO
-epel_repo_url: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-
-  {{ ansible_distribution_major_version }}.noarch.rpm"
-epel_repo_gpg_key_url: "https://dl.fedoraproject.org/pub/epel/
-  RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
-epel_repofile_path: "/etc/yum.repos.d/epel.repo"
-
-# REMI REPO
-remi_repo_url: "http://rpms.remirepo.net/enterprise/
-  remi-release-{{ ansible_distribution_major_version }}.rpm"
 
 # Common Variables
 redis_version: stable

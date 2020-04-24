@@ -14,6 +14,14 @@
     chdir: /opt/redis-{{ redis_version }}
     target: install
 
+- name: Deleting the downloaded redis package
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "/opt/redis-{{ redis_version }}.tar.gz"
+    - "/opt/redis-{{ redis_version }}"
+
 - name: Creating group for redis
   group:
     name: "redis"
