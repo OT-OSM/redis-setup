@@ -108,14 +108,14 @@
   set_fact:
     cluster_create_command: >
       "redis-cli --cluster create {{ redis_nodeip_port_list }}
-      --cluster-replicas {{ redis_cluster_replicas }}"
+      --cluster-replicas {{ redis_cluster_replicas }} --cluster-yes"
   when: redis_password is not defined
 
 - name: Setting fact for cluster create command without password
   set_fact:
     cluster_create_command: >
       "redis-cli --cluster create {{ redis_nodeip_port_list }}
-      --cluster-replicas {{ redis_cluster_replicas }} -a {{ redis_password }}"
+      --cluster-replicas {{ redis_cluster_replicas }} --cluster-yes -a {{ redis_password }}"
   when: redis_password is defined
 
 - name: Create Redis Cluster
