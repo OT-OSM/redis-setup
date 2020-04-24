@@ -41,3 +41,25 @@ We have some other mandatory variable under [vars](./vars) directory which can b
 
 We have some other mandatory variable under [defaults](./defaults) directory which can be changed as per need basis.
 
+## Inventory
+
+Inventory file for using this role will look like this:-
+
+```ini
+[redis-nodes]
+ node1 ansible_ssh_host=redis1
+ node2 ansible_ssh_host=redis2
+ node3 ansible_ssh_host=redis3
+ node4 ansible_ssh_host=redis4
+ node5 ansible_ssh_host=redis5
+ node6 ansible_ssh_host=redis6
+
+[cluster-formation-node]
+ node1
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+ansible_user=tony-stark
+redis_port=6379
+```
+
