@@ -64,4 +64,32 @@ ansible_user=tony-stark
 redis_port=6379
 ```
 
+## Example Playbook
 
+Here is an example playbook:-
+
+```yml
+---
+- hosts: redis-nodes
+  roles:
+    - role: osm_redis
+      become: true
+```
+
+## Usage
+
+For using this role you have to execute playbook only
+
+```shell
+ansible-playbook -i hosts site.yml
+```
+
+## Running Test Cases for Setup
+
+For running the test cases, we have a seperate folder named inspec. Inspec (https://www.inspec.io/) should be installed if you want to run the test cases.
+
+Command which needs to be run
+
+```shell
+inspec exec . -t ssh://username@server_ip -i /path/to/keyfile
+```
