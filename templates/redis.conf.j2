@@ -62,3 +62,11 @@ slowlog-max-len {{ redis_slowlog_max_len }}
 
 # latency monitor
 latency-monitor-threshold 0
+
+{% if redis_password -%}
+requirepass {{ redis_password }}
+{%- endif %}
+
+{% if cluster_enabled == true and redis_password %}
+masterauth {{ redis_password }}
+{% endif %}

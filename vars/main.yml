@@ -12,3 +12,4 @@ redis_nodeip_port_list:
   "{{ groups['redis-nodes'] | map('extract', hostvars, ['ansible_ssh_host']) |
   join(':%s ' %(redis_port)) }}:{{ redis_port }}"
 redis_cluster_replicas: 1
+redis_password: "Opstree@1234"

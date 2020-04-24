@@ -1,9 +1,9 @@
 ---
-- name: Restart Redis
+- name: Restart Redis Service
   systemd:
     name: redis.service
     enabled: yes
-    state: started
+    state: restarted
 
 - name: Reload Redis Service
   systemd:

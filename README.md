@@ -22,6 +22,7 @@ We have categorized variables into two part i.e. **Manadatory** and **Optional**
 
 |**Variables**| **Default Values**| **Possible Values** | **Description**|
 |-------------|-------------------|---------------------|----------------|
+| redis_password | `NotWeak@123` | *Any Strong Password* | Redis server password |
 | redis_logfile | `/var/log/redis/redis.log` | *Any Linux Directory* | Logfile path of the redis server |
 | redis_conf_file_location | `/etc/redis/cluster` | *Any Linux Directory* | Configuration file path for redis server |
 | redis_dir | `/var/lib/redis` | *Any Linux Directory* |  Data directory for redis server |
@@ -133,8 +134,4 @@ Test Summary: 20 successful, 0 failures, 0 skipped
 
 ## Author
 
-[Arpeet Gupta](mailto:abhishek.dubey@opstree.com)
-
-## To Do
-
-- [ ] Add password support
+[Arpeet Gupta](mailto:arpeet.gupta@opstree.com)

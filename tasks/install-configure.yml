@@ -67,7 +67,7 @@
     dest: "{{ redis_conf_file_location }}/redis.conf"
     owner: redis
     group: redis
-  notify: Restart Redis
+  notify: Restart Redis Service
 
 - name: Copy redis.service file
   template:
@@ -76,13 +76,37 @@
     owner: root
     group: root
   notify:
-    - Reload Redis
-    - Restart Redis
+    - Reload Redis Service
+    - Restart Redis Service
+
+- name: Reload redis service
+  systemd:
+    daemon_reload: yes
+
+- name: Restart Redis Service
+  systemd:
+    name: redis.service
+    enabled: yes
+    state: started
 
 - name: Check Redis Cluster
   command: redis-cli cluster nodes
   when: inventory_hostname in groups['cluster-formation-node']
   register: command_result
+
+- name: Setting fact for cluster create command without password
+  set_fact:
+    cluster_create_command: >
+      "redis-cli --cluster create {{ redis_nodeip_port_list }}
+      --cluster-replicas {{ redis_cluster_replicas }}"
+  when: redis_password is not defined
+
+- name: Setting fact for cluster create command without password
+  set_fact:
+    cluster_create_command: >
+      "redis-cli --cluster create {{ redis_nodeip_port_list }}
+      --cluster-replicas {{ redis_cluster_replicas }} -a {{ redis_password }}"
+  when: redis_password is defined
 
 - name: Create Redis Cluster
   command: >
