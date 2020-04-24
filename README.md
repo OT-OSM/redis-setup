@@ -60,6 +60,8 @@ Inventory file for using this role will look like this:-
 [all:vars]
 ansible_python_interpreter=/usr/bin/python3
 ansible_user=tony-stark
+# Reason to define redis port is that we can have every server running on different redis port
 redis_port=6379
 ```
+
 
