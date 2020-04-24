@@ -117,8 +117,7 @@
   when: redis_password is defined
 
 - name: Create Redis Cluster
-  command: >| replace('\n', '')
-    "{{ cluster_create_command }}"
+  command: "{{ cluster_create_command }}"
   args:
     stdin: "yes"
   when: >
