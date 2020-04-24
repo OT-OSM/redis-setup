@@ -100,7 +100,7 @@
   when: redis_password is defined
 
 - name: Check Redis Cluster
-  command: redis-cli cluster nodes
+  command: "{{ redis_check_command }}"
   when: inventory_hostname in groups['cluster-formation-node']
   register: command_result
 
