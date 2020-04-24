@@ -111,7 +111,7 @@
       --cluster-replicas {{ redis_cluster_replicas }} --cluster-yes"
   when: redis_password is not defined
 
-- name: Setting fact for cluster create command without password
+- name: Setting fact for cluster create command with password
   set_fact:
     cluster_create_command: >
       "redis-cli --cluster create {{ redis_nodeip_port_list }}
