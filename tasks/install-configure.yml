@@ -96,7 +96,7 @@
 
 - name: Create redis check command with password
   set_fact:
-    redis_check_command: redis-cli cluster nodes -a {{ redis_password }}
+    redis_check_command: redis-cli cluster nodes -a {{ redis_password }} | replace('\n', '')
   when: redis_password is not defined
 
 - name: Check Redis Cluster
