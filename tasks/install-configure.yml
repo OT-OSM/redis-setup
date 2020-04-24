@@ -96,7 +96,7 @@
 
 - name: Create redis check command with password
   set_fact:
-    redis_check_command: "redis-cli cluster nodes -a {{ redis_password }} | replace('\n', '')"
+    redis_check_command: "redis-cli -a {{ redis_password }} cluster nodes"
   when: redis_password is defined
 
 - name: Check Redis Cluster
@@ -115,7 +115,7 @@
   set_fact:
     cluster_create_command: >
       "redis-cli --cluster create {{ redis_nodeip_port_list }}
-      --cluster-replicas {{ redis_cluster_replicas }} --cluster-yes -a {{ redis_password }} | replace('\n', '')"
+      --cluster-replicas {{ redis_cluster_replicas }} --cluster-yes -a {{ redis_password | replace('\n', '') }}"
   when: redis_password is defined
 
 - name: Create Redis Cluster
