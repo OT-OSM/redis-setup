@@ -78,10 +78,10 @@
 
 - name: Create Redis Cluster
   command: >
-          "redis-cli --cluster create {{ redis_nodeip_port_list }} 
-          --cluster-replicas {{ redis_cluster_replicas }}"
+    "redis-cli --cluster create {{ redis_nodeip_port_list }} 
+    --cluster-replicas {{ redis_cluster_replicas }}"
   args:
     stdin: "yes"
   when: >
-        inventory_hostname in groups['cluster-formation-node'] and 
-        command_result.stdout.split('\n')|length != groups['redis-nodes']|length
+    inventory_hostname in groups['cluster-formation-node'] and 
+    command_result.stdout.split('\n')|length != groups['redis-nodes']|length
