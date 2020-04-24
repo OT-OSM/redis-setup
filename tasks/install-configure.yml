@@ -113,13 +113,11 @@
 
 - name: Setting fact for cluster create command with password
   set_fact:
-    cluster_create_command: >
-      "redis-cli --cluster create {{ redis_nodeip_port_list }}
-      --cluster-replicas {{ redis_cluster_replicas }} --cluster-yes -a {{ redis_password | replace('\n', '') }}"
+    cluster_create_command: "redis-cli --cluster create {{ redis_nodeip_port_list }} --cluster-replicas {{ redis_cluster_replicas }} --cluster-yes -a {{ redis_password }}"
   when: redis_password is defined
 
 - name: Create Redis Cluster
-  command: >
+  command: >| replace('\n', '')
     "{{ cluster_create_command }}"
   args:
     stdin: "yes"
