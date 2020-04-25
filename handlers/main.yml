@@ -1,10 +1,10 @@
 ---
-- name: Restart Redis Service
+- name: Start Redis Service
   systemd:
     name: redis.service
     enabled: yes
     state: restarted
 
-- name: Reload Redis Service
+- name: Reload systemd daemon
   systemd:
     daemon_reload: yes

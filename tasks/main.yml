@@ -1,14 +1,14 @@
 ---
-- name: Checking Pre Requisities
+- name: Checking Pre-Requisities
   include: check-prerequisities.yml
 
-- name: Configure RedHat system to install Redis
-  include: redhat.yml
-  when: ansible_os_family == 'RedHat'
+- name: Configure OS level packages
+  include: configure-packages.yml
 
-- name: Configure Debian system to install Redis
-  include: debian.yml
-  when: ansible_os_family == 'Debian'
-
-- name: Install and configure Redis
+- name: Install and configure redis with common configuration
   include: install-configure.yml
+
+- name: Configure standalone Redis Server
+  include: standalone.yml
+  when: >
+    groups['standalone'] is defined

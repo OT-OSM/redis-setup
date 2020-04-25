@@ -37,9 +37,9 @@
     system: yes
     state: present
 
-- name: Creating logfile directory
+- name: Creating logfile directory for standalone setup
   file:
-    path: "/var/log/redis"
+    path: "{{ redis_log_dir }}"
     state: directory
     recurse: yes
     owner: redis
@@ -60,68 +60,3 @@
     recurse: yes
     owner: redis
     group: redis
-
-- name: Copy redis.conf
-  template:
-    src: redis.conf.j2
-    dest: "{{ redis_conf_file_location }}/redis.conf"
-    owner: redis
-    group: redis
-  notify: Restart Redis Service
-
-- name: Copy redis.service file
-  template:
-    src: redis.service.j2
-    dest: "/etc/systemd/system/redis.service"
-    owner: root
-    group: root
-  notify:
-    - Reload Redis Service
-    - Restart Redis Service
-
-- name: Reload redis service
-  systemd:
-    daemon_reload: yes
-
-- name: Restart Redis Service
-  systemd:
-    name: redis.service
-    enabled: yes
-    state: started
-
-- name: Create redis check command without passsword
-  set_fact:
-    redis_check_command: redis-cli cluster nodes
-  when: redis_password is not defined
-
-- name: Create redis check command with password
-  set_fact:
-    redis_check_command: "redis-cli -a {{ redis_password }} cluster nodes"
-  when: redis_password is defined
-
-- name: Check Redis Cluster
-  command: "{{ redis_check_command }}"
-  when: inventory_hostname in groups['cluster-formation-node']
-  register: command_result
-
-- name: Generic cluster create command
-  set_fact:
-    generic_cluster_command: "redis-cli --cluster create {{ redis_nodeip_port_list }}"
-
-- name: Setting fact for cluster create command without password
-  set_fact:
-    cluster_create_command: "{{ generic_cluster_command  }} --cluster-replicas {{ redis_cluster_replicas }} --cluster-yes"
-  when: redis_password is not defined
-
-- name: Setting fact for cluster create command with password
-  set_fact:
-    cluster_create_command: "{{ generic_cluster_command  }} --cluster-replicas {{ redis_cluster_replicas }} --cluster-yes -a {{ redis_password }}"
-  when: redis_password is defined
-
-- name: Create Redis Cluster
-  command: "{{ cluster_create_command }}"
-  args:
-    stdin: "yes"
-  when: >
-    inventory_hostname in groups['cluster-formation-node'] and
-    command_result.stdout.split('\n')|length != groups['redis-nodes']|length
