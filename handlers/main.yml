@@ -5,6 +5,12 @@
     enabled: yes
     state: restarted
 
+- name: Start Redis Master Service
+  systemd:
+    name: redis-master.service
+    enabled: yes
+    state: restarted
+
 - name: Reload systemd daemon
   systemd:
     daemon_reload: yes

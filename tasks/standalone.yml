@@ -16,13 +16,3 @@
     group: redis
   notify:
     - Start Redis Service
-
-- name: Create redis check command without passsword
-  set_fact:
-    redis_check_command: redis-cli cluster
-  when: redis_password is not defined
-
-- name: Create redis check command with password
-  set_fact:
-    redis_check_command: "redis-cli -a {{ redis_password }}"
-  when: redis_password is defined

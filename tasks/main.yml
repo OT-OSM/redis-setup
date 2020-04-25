@@ -12,3 +12,8 @@
   include: standalone.yml
   when: >
     groups['standalone'] is defined
+
+- name: Configure Redis master
+  include: master.yml
+  when: >
+    groups['master_nodes'] is defined

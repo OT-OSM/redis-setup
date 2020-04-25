@@ -1,0 +1,14 @@
+---
+- name: Create redis check command without passsword
+  set_fact:
+    redis_command: redis-cli cluster
+  when: redis_password is not defined
+
+- name: Create redis check command with password
+  set_fact:
+    redis_command: "redis-cli -a {{ redis_password }}"
+  when: redis_password is defined
+
+- name: Check Redis Server status
+  command: "{{ redis_command }} ping"
+  changed_when: false
