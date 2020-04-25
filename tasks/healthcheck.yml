@@ -9,6 +9,17 @@
     redis_command: "redis-cli -a {{ redis_password }}"
   when: redis_password is defined
 
-- name: Check Redis Server status
+- name: Check Redis Standalone Server status
   command: "{{ redis_command }} ping"
   changed_when: false
+  when: inventory_hostname in groups['standalone']
+
+- name: Check Redis Master Server status
+  command: "{{ redis_command }} -p {{ master_redis_port }} ping"
+  changed_when: false
+  when: inventory_hostname in groups['master_nodes']
+
+- name: Check Redis Slave Server status
+  command: "{{ redis_command }} -p {{ slave_redis_port }} ping"
+  changed_when: false
+  when: inventory_hostname in groups['slave_nodes']

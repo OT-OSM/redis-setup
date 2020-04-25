@@ -11,6 +11,12 @@
     enabled: yes
     state: restarted
 
+- name: Start Redis Slave Service
+  systemd:
+    name: redis-slave.service
+    enabled: yes
+    state: restarted
+
 - name: Reload systemd daemon
   systemd:
     daemon_reload: yes

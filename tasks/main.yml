@@ -11,9 +11,14 @@
 - name: Configure standalone Redis Server
   include: standalone.yml
   when: >
-    groups['standalone'] is defined
+    inventory_hostname in groups['standalone']
 
 - name: Configure Redis master
   include: master.yml
   when: >
-    groups['master_nodes'] is defined
+    inventory_hostname in groups['master_nodes']
+
+- name: Configure Redis master
+  include: slave.yml
+  when: >
+    inventory_hostname in groups['slave_nodes']
