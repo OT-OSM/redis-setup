@@ -1,5 +1,8 @@
 ---
-- hosts: redis-nodes
+- hosts: redis_cluster
   become: true
   roles:
     - osm_redis
+  post_tasks:
+    - include: tasks/healthcheck.yml
+    - include: tasks/create-cluster.yml

@@ -47,22 +47,32 @@ We have some other mandatory variable under [defaults](./defaults) directory whi
 Inventory file for using this role will look like this:-
 
 ```ini
-[redis-nodes]
- node1 ansible_ssh_host=redis1
- node2 ansible_ssh_host=redis2
- node3 ansible_ssh_host=redis3
- node4 ansible_ssh_host=redis4
- node5 ansible_ssh_host=redis5
- node6 ansible_ssh_host=redis6
+[standalone]
+server ansible_ssh_host=173.230.142.155
 
-[cluster-formation-node]
- node1
+[master_nodes]
+masternode1 ansible_ssh_host=173.230.142.155 master_redis_port=6379
+masternode2 ansible_ssh_host=50.116.35.169 master_redis_port=6379
+masternode3 ansible_ssh_host=192.155.93.57 master_redis_port=6379
+
+[slave_nodes]
+slavenode1 ansible_ssh_host=173.230.142.155 master_node=192.155.93.57
+slavenode2 ansible_ssh_host=50.116.35.169 master_node=173.230.142.155
+slavenode3 ansible_ssh_host=192.155.93.57 master_node=50.116.35.169
+
+[redis_cluster:children]
+master_nodes
+slave_nodes
+
+[cluster_formation_node]
+masternode1
 
 [all:vars]
 ansible_python_interpreter=/usr/bin/python3
-ansible_user=tony-stark
-# Reason to define redis port is that we can have every server running on different redis port
+ansible_user=root
 redis_port=6379
+master_redis_port=6379
+slave_redis_port=6380
 ```
 
 ## Example Playbook
