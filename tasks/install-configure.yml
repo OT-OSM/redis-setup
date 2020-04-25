@@ -69,7 +69,7 @@
     owner: redis
     group: redis
 
-- name: create "{{ redis_conf_file_location }}" directory
+- name: Create "{{ redis_conf_file_location }}" directory
   file:
     path: "{{ redis_conf_file_location }}"
     state: directory
