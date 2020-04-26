@@ -48,17 +48,22 @@ Inventory file for using this role will look like this:-
 
 ```ini
 [standalone]
-server ansible_ssh_host=173.230.142.155
+standalone1 ansible_ssh_host=23.92.28.137
+
+[redis_nodes]
+redisnode1 ansible_ssh_host=23.92.28.137
+redisnode2 ansible_ssh_host=173.230.142.155
+redisnode3 ansible_ssh_host=50.116.35.169
 
 [master_nodes]
-masternode1 ansible_ssh_host=173.230.142.155 master_redis_port=6379
-masternode2 ansible_ssh_host=50.116.35.169 master_redis_port=6379
-masternode3 ansible_ssh_host=192.155.93.57 master_redis_port=6379
+masternode1 ansible_ssh_host=23.92.28.137 master_id=0
+masternode2 ansible_ssh_host=173.230.142.155 master_id=1
+masternode3 ansible_ssh_host=50.116.35.169 master_id=2
 
 [slave_nodes]
-slavenode1 ansible_ssh_host=173.230.142.155 master_node=192.155.93.57
-slavenode2 ansible_ssh_host=50.116.35.169 master_node=173.230.142.155
-slavenode3 ansible_ssh_host=192.155.93.57 master_node=50.116.35.169
+slavenode1 ansible_ssh_host=23.92.28.137 master_id=2
+slavenode2 ansible_ssh_host=173.230.142.155 master_id=0
+slavenode3 ansible_ssh_host=50.116.35.169 master_id=1
 
 [redis_cluster:children]
 master_nodes
@@ -67,12 +72,14 @@ slave_nodes
 [cluster_formation_node]
 masternode1
 
-[all:vars]
-ansible_python_interpreter=/usr/bin/python3
-ansible_user=root
+[redis_cluster:vars]
 redis_port=6379
 master_redis_port=6379
 slave_redis_port=6380
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+ansible_user=root
 ```
 
 ## Example Playbook
