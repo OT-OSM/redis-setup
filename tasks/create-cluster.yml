@@ -12,12 +12,16 @@
 - name: Creating the list of master servers
   set_fact:
     master_ip_list: |-
-      {{ groups['master_nodes'] | map('extract', hostvars, ['ansible_ssh_host'])
+      {{ groups['master_nodes'] | map('extract', hostvars, ['ansible_eth0', 'ipv4', 'address'])
       | join(':%s ' %(master_redis_port)) }}:{{ master_redis_port }}
+  when: >
+    cluster_enabled
 
 - name: Check Redis Cluster exists or not
   command: "{{ redis_command }} cluster nodes"
-  when: inventory_hostname in groups['cluster_formation_node']
+  when: >
+    inventory_hostname in groups['cluster_formation_node'] and
+    cluster_enabled
   register: command_result
 
 - name: Creating Redis Cluster for Master Nodes
@@ -27,12 +31,14 @@
     stdin: "yes"
   when: >
     inventory_hostname in groups['cluster_formation_node'] and
-    command_result.stdout.split('\n')|length < groups['master_nodes']|length
+    command_result.stdout.split('\n')|length < groups['master_nodes']|length and
+    cluster_enabled
 
 - name: Adding Slaves to Master nodes
   command: >-
-    {{ redis_command }} --cluster add-node {{ hostvars[item]['ansible_ssh_host'] }}:{{ slave_redis_port }}
-    {{ hostvars[item]['master_node'] }}:{{ master_redis_port }}
+    {{ redis_command }} --cluster add-node
+    {{ hostvars[item]['ansible_eth0']['ipv4']['address'] }}:{{ slave_redis_port }}
+    {{ hostvars[groups['master_nodes'][(hostvars[item]['master_id'])]].ansible_eth0.ipv4.address }}:{{ master_redis_port }}
     --cluster-slave
   args:
     stdin: "yes"
@@ -41,4 +47,5 @@
   when:
     inventory_hostname in groups['cluster_formation_node'] and
     command_result.stdout.split('\n')|length < groups['redis_cluster']|length and
-    groups['slave_nodes'] is defined
+    groups['slave_nodes'] is defined and
+    cluster_enabled
