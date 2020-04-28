@@ -11,3 +11,4 @@ redis_maxmemory_policy: noeviction
 cluster_enabled: true
 redis_cluster_replicas: 1
 redis_password: "Opstree@1234"
+upgrade_redis: false

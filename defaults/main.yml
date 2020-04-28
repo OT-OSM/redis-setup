@@ -64,3 +64,8 @@ redis_runtime_directory: redis
 
 # Common Variables
 redis_version: stable
+
+# Disable command
+disable_commands:
+  - FLUSHDB
+  - FLUSHALL

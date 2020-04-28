@@ -28,15 +28,19 @@ cluster-config-file {{redis_cluster_config_file}}
 {% endif %}
 
 # Snapshotting
-{% for save in redis_save -%}
+{% for save in redis_save %}
 save {{ save }}
-{%- endfor %}
+{% endfor %}
 stop-writes-on-bgsave-error {{ redis_stop_writes_on_bgsave_error|string }}
 rdbcompression {{ redis_rdbcompression|string }}
 rdbchecksum {{ redis_rdbchecksum|string }}
 dbfilename {{ redis_db_filename|string }}
 dir {{ redis_dir }}
 
+# Disable Redis commands
+{% for disable_command in disable_commands %}
+rename-command {{ disable_command }} ""
+{% endfor %}
 
 # Clients -- not in default redis.conf
 maxclients {{ redis_maxclients }}

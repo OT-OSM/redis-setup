@@ -15,20 +15,34 @@
   command: "echo never > /sys/kernel/mm/transparent_hugepage/enabled"
   changed_when: false
 
+- name: Check if redis is previously installed or not
+  stat:
+    path: "/usr/local/bin/redis-server"
+  register: redis_status
+
 - name: Download redis artifact
   unarchive:
     src: "http://download.redis.io/releases/redis-{{ redis_version }}.tar.gz"
     dest: /opt/
     remote_src: yes
+  when: >
+    not redis_status.stat.exists or
+    upgrade_redis
 
 - name: Build runtime dependencies for redis
   make:
-    chdir: /opt/redis-{{ redis_version }}
+    chdir: "/opt/redis-{{ redis_version }}"
+  when: >
+    not redis_status.stat.exists or
+    upgrade_redis
 
 - name: Install redis server
   make:
-    chdir: /opt/redis-{{ redis_version }}
+    chdir: "/opt/redis-{{ redis_version }}"
     target: install
+  when: >
+    not redis_status.stat.exists or
+    upgrade_redis
 
 - name: Deleting the downloaded redis package
   file:
@@ -37,6 +51,9 @@
   with_items:
     - "/opt/redis-{{ redis_version }}.tar.gz"
     - "/opt/redis-{{ redis_version }}"
+  when: >
+    not redis_status.stat.exists or
+    upgrade_redis
 
 - name: Creating group for redis
   group:
