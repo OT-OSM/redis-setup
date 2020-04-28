@@ -9,10 +9,12 @@ Here some key features of this ansible role:-
 - Standalone/Cluster Setup
 - Muti OS support i.e. RedHat and Debian
 - Multiple version support
+- Best Practices in terms of redis setup
+- Security
 
 ## Requirements
 
-No special requirement, only a privileged user is required.
+No special requirement, only a privileged user is required to access server.
 
 ## Role Variables
 
@@ -27,6 +29,7 @@ We have categorized variables into two part i.e. **Manadatory** and **Optional**
 | redis_conf_file_location | `/etc/redis/cluster` | *Any Linux Directory* | Configuration file path for redis server |
 | redis_dir | `/var/lib/redis` | *Any Linux Directory* |  Data directory for redis server |
 | cluster_enabled | `true` | *true* or *false* | Redis setup in cluster mode or not |
+| upgrade_redis | `false` | *true* or *false* | Whether you want to upgrade the existing redis cluster or not |
 
 We have some other mandatory variable under [vars](./vars) directory which can be changed as per need basis.
 
@@ -88,10 +91,15 @@ Here is an example playbook:-
 
 ```yml
 ---
-- hosts: redis-nodes
+- hosts: redis_nodes
+  become: true
   roles:
-    - role: osm_redis
-      become: true
+    - osm_redis
+
+- hosts: redis_cluster
+  become: true
+  roles:
+    - osm_redis
 ```
 
 ## Usage
@@ -151,4 +159,4 @@ Test Summary: 20 successful, 0 failures, 0 skipped
 
 ## Author
 
-[Arpeet Gupta](mailto:arpeet.gupta@opstree.com)
+[Abhishek Dubey](mailto:abhishek.dubey@opstree.com)
