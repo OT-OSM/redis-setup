@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: Arpeet Gupta
+  author: Abhishek Dubey
   description: Ansible role to setup a production grade redis cluster/server
   company: OpsTree Solutions
 
