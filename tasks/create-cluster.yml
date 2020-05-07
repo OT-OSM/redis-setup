@@ -12,7 +12,7 @@
 - name: Creating the list of master servers
   set_fact:
     master_ip_list: |-
-      {{ groups['master_nodes'] | map('extract', hostvars, ['ansible_eth0', 'ipv4', 'address'])
+      {{ groups['master_nodes'] | map('extract', hostvars, ['ansible_default_ipv4', 'address'])
       | join(':%s ' %(master_redis_port)) }}:{{ master_redis_port }}
   when: >
     cluster_enabled
@@ -37,8 +37,8 @@
 - name: Adding Slaves to Master nodes
   command: >-
     {{ redis_command }} --cluster add-node
-    {{ hostvars[item]['ansible_eth0']['ipv4']['address'] }}:{{ slave_redis_port }}
-    {{ hostvars[groups['master_nodes'][(hostvars[item]['master_id'])]].ansible_eth0.ipv4.address }}:{{ master_redis_port }}
+    {{ hostvars[item]['ansible_default_ipv4']['address'] }}:{{ slave_redis_port }}
+    {{ hostvars[groups['master_nodes'][(hostvars[item]['master_id'])]].ansible_default_ipv4.address }}:{{ master_redis_port }}
     --cluster-slave
   args:
     stdin: "yes"
