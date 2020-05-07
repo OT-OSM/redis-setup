@@ -5,7 +5,7 @@ After=network.target
 [Service]
 ExecStart=/usr/local/bin/redis-server {{ redis_conf_file_location }}/redis.conf --supervised systemd
 ExecStop=/bin/redis-cli shutdown
-Type=notify
+Type=simple
 User=redis
 Group=redis
 RuntimeDirectory={{ redis_runtime_directory }}
