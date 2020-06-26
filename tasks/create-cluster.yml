@@ -2,12 +2,12 @@
 - name: Create redis command without passsword
   set_fact:
     redis_command: redis-cli
-  when: redis_password is not defined
+  when: redis_password == ""
 
 - name: Create redis command with password
   set_fact:
     redis_command: "redis-cli -a {{ redis_password }}"
-  when: redis_password is defined
+  when: redis_password is defined and redis_password != ""
 
 - name: Creating the list of master servers
   set_fact:
