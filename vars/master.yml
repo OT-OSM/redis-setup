@@ -1,0 +1,6 @@
+---
+redis_conf_file_location: "/etc/redis/cluster/master"
+redis_logfile: "/var/log/redis/master/redis.log"
+redis_dir: "/var/lib/redis/master"
+redis_log_dir: "/var/log/redis/master"
+redis_cluster_config_file: "/etc/redis/cluster/master/nodes.conf"

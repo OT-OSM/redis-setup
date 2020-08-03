@@ -1,0 +1,51 @@
+---
+- name: Create redis command without passsword
+  set_fact:
+    redis_command: redis-cli
+  when: redis_password == ""
+
+- name: Create redis command with password
+  set_fact:
+    redis_command: "redis-cli -a {{ redis_password }}"
+  when: redis_password is defined and redis_password != ""
+
+- name: Creating the list of master servers
+  set_fact:
+    master_ip_list: |-
+      {{ groups['master_nodes'] | map('extract', hostvars, ['ansible_default_ipv4', 'address'])
+      | join(':%s ' %(master_redis_port)) }}:{{ master_redis_port }}
+  when: >
+    cluster_enabled
+
+- name: Check Redis Cluster exists or not
+  command: "{{ redis_command }} cluster nodes"
+  when: >
+    inventory_hostname in groups['cluster_formation_node'] and
+    cluster_enabled
+  register: command_result
+
+- name: Creating Redis Cluster for Master Nodes
+  command: |-
+    {{ redis_command }} --cluster create {{ master_ip_list }} --cluster-yes
+  args:
+    stdin: "yes"
+  when: >
+    inventory_hostname in groups['cluster_formation_node'] and
+    command_result.stdout.split('\n')|length < groups['master_nodes']|length and
+    cluster_enabled
+
+- name: Adding Slaves to Master nodes
+  command: >-
+    {{ redis_command }} --cluster add-node
+    {{ hostvars[item]['ansible_default_ipv4']['address'] }}:{{ slave_redis_port }}
+    {{ hostvars[groups['master_nodes'][(hostvars[item]['master_id'])]].ansible_default_ipv4.address }}:{{ master_redis_port }}
+    --cluster-slave
+  args:
+    stdin: "yes"
+  with_items:
+    - "{{ groups['slave_nodes'] }}"
+  when:
+    inventory_hostname in groups['cluster_formation_node'] and
+    command_result.stdout.split('\n')|length < groups['redis_cluster']|length and
+    groups['slave_nodes'] is defined and
+    cluster_enabled

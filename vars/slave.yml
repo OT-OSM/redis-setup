@@ -1,0 +1,6 @@
+---
+redis_conf_file_location: "/etc/redis/cluster/slave"
+redis_logfile: "/var/log/redis/slave/redis.log"
+redis_dir: "/var/lib/redis/slave"
+redis_log_dir: "/var/log/redis/slave"
+redis_cluster_config_file: "/etc/redis/cluster/slave/nodes.conf"

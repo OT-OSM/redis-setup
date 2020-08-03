@@ -1,6 +1,6 @@
 {{ ansible_managed | comment }}
 #network
-bind {{ redis_bind }}
+bind 0.0.0.0
 protected-mode {{ redis_protected_mode }}
 port {{ redis_port }}
 tcp-keepalive {{ redis_tcp_keepalive }}
@@ -11,7 +11,6 @@ unixsocket {{ redis_socket_path }}
 unixsocketperm {{ redis_socket_perm }}
 {% endif -%}
 
-
 # General
 supervised {{redis_supervised}}
 always-show-logo {{redis_always_show_logo}}
@@ -21,22 +20,27 @@ loglevel {{ redis_loglevel }}
 databases {{ redis_databases }}
 logfile {{ redis_logfile }}
 
-
 #cluster
-cluster-enabled {{redis_cluster_enabled}}
+{% if cluster_enabled == true %}
+cluster-enabled yes
 cluster-node-timeout {{redis_cluster_node_timeout}}
 cluster-config-file {{redis_cluster_config_file}}
+{% endif %}
 
 # Snapshotting
-{% for save in redis_save -%}
+{% for save in redis_save %}
 save {{ save }}
-{%- endfor %}
+{% endfor %}
 stop-writes-on-bgsave-error {{ redis_stop_writes_on_bgsave_error|string }}
 rdbcompression {{ redis_rdbcompression|string }}
 rdbchecksum {{ redis_rdbchecksum|string }}
 dbfilename {{ redis_db_filename|string }}
 dir {{ redis_dir }}
 
+# Disable Redis commands
+{% for disable_command in disable_commands %}
+rename-command {{ disable_command }} ""
+{% endfor %}
 
 # Clients -- not in default redis.conf
 maxclients {{ redis_maxclients }}
@@ -61,3 +65,11 @@ slowlog-max-len {{ redis_slowlog_max_len }}
 
 # latency monitor
 latency-monitor-threshold 0
+
+{% if redis_password -%}
+requirepass {{ redis_password }}
+{%- endif %}
+
+{% if cluster_enabled == true and redis_password %}
+masterauth {{ redis_password }}
+{% endif %}

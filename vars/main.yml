@@ -1,10 +1,14 @@
 ---
 # vars file for redis
 redis_logfile: "/var/log/redis/redis.log"
-redis_port: 7000
+redis_log_dir: "/var/log/redis"
 redis_bind: "{{ ansible_ssh_host }}"
 redis_conf_file_location: /etc/redis/cluster
 redis_runtime_directory: redis
 redis_dir: "/var/lib/redis"
 redis_slowlog_log_slower_than: 10000
 redis_maxmemory_policy: noeviction
+cluster_enabled: true
+redis_cluster_replicas: 1
+redis_password: "Opstree@1234"
+upgrade_redis: false

@@ -1,0 +1,10 @@
+---
+name: redis-osm-test-cases
+title: Test cases for OSM Redis Cluster
+maintainer: OpsTree
+summary: OSM redis cluster InSpec profile.
+license: Apache-2.0
+Description: An InSpec Profile.
+version: 0.1.0
+supports:
+  platform: os

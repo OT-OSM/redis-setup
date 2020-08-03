@@ -1,0 +1,47 @@
+---
+- name: Including vars file for master
+  include_vars: master.yml
+
+- name: Creating logfile directory for master setup
+  file:
+    path: "{{ redis_log_dir }}"
+    state: directory
+    recurse: yes
+    owner: redis
+    group: redis
+
+- name: Creating redis data directory
+  file:
+    path: "{{ redis_dir }}"
+    state: directory
+    recurse: yes
+    owner: redis
+    group: redis
+
+- name: Creating "{{ redis_conf_file_location }}" directory
+  file:
+    path: "{{ redis_conf_file_location }}"
+    state: directory
+    recurse: yes
+    owner: redis
+    group: redis
+
+- name: Copy redis.service file to redis server
+  template:
+    src: redis.service.j2
+    dest: "/etc/systemd/system/redis-master.service"
+    owner: root
+    group: root
+  notify:
+    - Reload systemd daemon
+
+- name: Copy redis.conf to redis server
+  template:
+    src: redis.conf.j2
+    dest: "{{ redis_conf_file_location }}/redis.conf"
+    owner: redis
+    group: redis
+  vars:
+    redis_port: "{{ master_redis_port }}"
+  notify:
+    - Start Redis Master Service

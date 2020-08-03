@@ -1,0 +1,10 @@
+---
+- hosts: redis_nodes
+  become: true
+  roles:
+    - osm_redis
+
+- hosts: redis_cluster
+  become: true
+  roles:
+    - osm_redis
