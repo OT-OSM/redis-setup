@@ -32,4 +32,5 @@
   copy:
     content: "never"
     dest: /sys/kernel/mm/transparent_hugepage/enabled
+  sudo: yes
   become: yes
