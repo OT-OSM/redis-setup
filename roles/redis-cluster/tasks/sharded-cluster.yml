@@ -1,0 +1,22 @@
+---
+- name: Ensure redis-cli is generated without password
+  set_fact:
+    redis_command: redis-cli
+  when: redis_password == ""
+
+- name: Ensure redis-cli is generated with password
+  set_fact:
+    redis_command: "redis-cli -a {{ redis_password }}"
+  when: redis_password is defined and redis_password != ""
+
+- name: Ensuring the list of redis cluster nodes created
+  set_fact:
+    master_ip_list: |-
+      {{ groups['leader'] | map('extract', hostvars, ['ansible_default_ipv4', 'address'])
+      | join(':%s ' %(master_redis_port)) }}:{{ master_redis_port }}
+
+- name: Ensure if redis cluster exists or not
+  command: "{{ redis_command }} cluster nodes"
+  when: >
+    inventory_hostname in groups['leader'][0]
+  register: command_result

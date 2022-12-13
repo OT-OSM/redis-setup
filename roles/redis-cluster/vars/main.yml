@@ -1,3 +1,4 @@
 ---
 redis_password: "Opstree@1234"
 redis_runtime_directory: redis
+setup_mode: sharded
