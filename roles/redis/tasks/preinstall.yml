@@ -29,7 +29,7 @@
   become: yes
 
 - name: Disable Kernel Transparent Huge Pages
-  command: >
-    echo never > /sys/kernel/mm/transparent_hugepage/enabled
-  changed_when: false
+  copy:
+    content: "never"
+    dest: /sys/kernel/mm/transparent_hugepage/enabled
   become: yes
