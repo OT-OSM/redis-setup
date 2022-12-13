@@ -11,12 +11,36 @@
 
 - name: Ensuring the list of redis cluster nodes created
   set_fact:
-    master_ip_list: |-
+    leader_ip_list: |-
       {{ groups['leader'] | map('extract', hostvars, ['ansible_default_ipv4', 'address'])
-      | join(':%s ' %(master_redis_port)) }}:{{ master_redis_port }}
+      | join(':%s ' %(leader_redis_port)) }}:{{ leader_redis_port }}
 
 - name: Ensure if redis cluster exists or not
   command: "{{ redis_command }} cluster nodes"
   when: >
     inventory_hostname in groups['leader'][0]
   register: command_result
+
+- name: Ensuring redis cluster is created with leader nodes
+  command: |-
+    {{ redis_command }} --cluster create {{ leader_ip_list }} --cluster-yes
+  args:
+    stdin: "yes"
+  when: >
+    inventory_hostname in groups['leader'][0] and
+    command_result.stdout.split('\n')|length < groups['leader']|length
+
+- name: Ensuring redis follower nodes are part of the cluster
+  command: >-
+    {{ redis_command }} --cluster add-node
+    {{ hostvars[item]['ansible_default_ipv4']['address'] }}:{{ follower_redis_port }}
+    {{ hostvars[groups['leader'][(hostvars[item]['leader_id'])]].ansible_default_ipv4.address }}:{{ leader_redis_port }}
+    --cluster-slave
+  args:
+    stdin: "yes"
+  with_items:
+    - "{{ groups['follower'] }}"
+  when:
+    inventory_hostname in groups['leader'][0] and
+    command_result.stdout.split('\n')|length < groups['redis_cluster']|length and
+    groups['follower'] is defined

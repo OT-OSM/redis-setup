@@ -2,4 +2,5 @@
 redis_password: "Opstree@1234"
 redis_runtime_directory: redis
 setup_mode: sharded
-master_redis_port: 6379
+leader_redis_port: 6379
+follower_redis_port: 6380
