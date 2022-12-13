@@ -5,4 +5,4 @@
 
 - hosts: redis_cluster
   roles:
-    - { role: redis-cluster, tags: ["preinstall", "redis-cluster"] }
+    - { role: redis-cluster, tags: ["install", "redis-cluster"] }
