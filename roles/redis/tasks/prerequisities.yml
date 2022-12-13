@@ -1,0 +1,15 @@
+---
+- name: Checking redis hosts are defined or not
+  fail:
+    msg: "Setup execution failed due to missing group"
+  when: >
+    groups['redis_cluster'] is not defined and
+    groups['standalone'] is not defined and
+    groups['sentinel'] is not defined
+
+- name: Ensuring OS is supported by the automation
+  fail:
+    msg: "Setup execution failed because the {{ ansible_os_family }} is not supported"
+  when: >
+    ansible_os_family != "Debian" or
+    ansible_os_family != "RedHat"
