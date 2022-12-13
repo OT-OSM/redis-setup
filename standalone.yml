@@ -1,4 +1,4 @@
 ---
-- hosts: standalone
+- hosts: redis
   roles:
     - { role: redis, tags: ["preinstall", "redis"] }
