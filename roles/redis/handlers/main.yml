@@ -1,0 +1,10 @@
+---
+- name: Ensure that redis service exists on the system
+  systemd:
+    daemon_reload: yes
+
+- name: Ensure the redis configuration is updated
+  systemd:
+    name: redis.service
+    enabled: yes
+    state: restarted
