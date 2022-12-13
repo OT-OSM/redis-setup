@@ -9,6 +9,9 @@
   when: >
     inventory_hostname in groups['follower']
 
+- name: Ensuring that handlers are executed
+  meta: flush_handlers
+
 - name: Setup of redis sharded cluster on nodes
   include: sharded-cluster.yml
   when: >
