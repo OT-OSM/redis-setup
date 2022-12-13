@@ -13,3 +13,23 @@
     state: present
   become: yes
   when: ansible_os_family == "RedHat"
+
+- name: Channing sysctl parameter for redis performance
+  sysctl:
+    name: vm.overcommit_memory
+    value: "1"
+    state: present
+  become: yes
+
+- name: Updating maxconn sysctl parameter for redis
+  sysctl:
+    name: net.core.somaxconn
+    value: "65365"
+    state: present
+  become: yes
+
+- name: Disable Kernel Transparent Huge Pages
+  command: >
+    echo never > /sys/kernel/mm/transparent_hugepage/enabled
+  changed_when: false
+  become: yes
