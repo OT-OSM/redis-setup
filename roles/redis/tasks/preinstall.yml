@@ -1,5 +1,5 @@
 ---
-- name: Install build time dependencies and update repo
+- name: Ensure build tools are installed on the system (Debian)
   apt:
     name: "build-essential"
     state: present
@@ -7,30 +7,29 @@
   become: yes
   when: ansible_os_family == "Debian"
 
-- name: Installing development tools on RedHat System
+- name: Ensure build tools are installed on the system (RedHat)
   yum:
     name: "make"
     state: present
   become: yes
   when: ansible_os_family == "RedHat"
 
-- name: Channing sysctl parameter for redis performance
+- name: Ensuring redis performance parameters are defined
   sysctl:
     name: vm.overcommit_memory
     value: "1"
     state: present
   become: yes
 
-- name: Updating maxconn sysctl parameter for redis
+- name: Ensuring the maximum number of connection count is set
   sysctl:
     name: net.core.somaxconn
     value: "65365"
     state: present
   become: yes
 
-- name: Disable Kernel Transparent Huge Pages
+- name: Ensure that transparent huge page is disabled in Kernel
   copy:
     content: "never"
     dest: /sys/kernel/mm/transparent_hugepage/enabled
-  sudo: yes
   become: yes
