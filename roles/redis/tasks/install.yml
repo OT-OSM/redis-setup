@@ -40,11 +40,13 @@
   when: >
     not redis_status.stat.exists or
     upgrade_redis
+  become: yes
 
 - name: Ensuring that redis group exists in system
   group:
     name: "redis"
     state: present
+  become: yes
 
 - name: Ensuring that redis user exists in system
   user:
@@ -55,6 +57,7 @@
     createhome: no
     system: yes
     state: present
+  become: yes
 
 - name: Ensure the configuration directories are present
   file:
@@ -67,3 +70,4 @@
     - "{{ redis_log_dir }}"
     - "{{ redis_data_dir }}"
     - "{{ redis_conf_file_location }}"
+  become: yes
