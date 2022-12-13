@@ -29,5 +29,7 @@
   become: yes
 
 - name: Ensure that transparent huge page is disabled in Kernel
-  shell: echo never > /sys/kernel/mm/transparent_hugepage/enabled
+  shell: "echo never > /sys/kernel/mm/transparent_hugepage/enabled"
   become: yes
+  become_user: root
+  changed_when: False

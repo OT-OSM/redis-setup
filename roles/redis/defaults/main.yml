@@ -1,0 +1,3 @@
+---
+upgrade_redis: false
+redis_version: 7.0.6
