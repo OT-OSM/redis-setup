@@ -28,7 +28,7 @@
 - name: Ensure the redis configuration is updated (Follower)
   template:
     src: redis.conf.j2
-    dest: "{{ redis_conf_file_location }}/redis-follower.conf"
+    dest: "{{ redis_conf_file_location }}/redis.conf"
     owner: redis
     group: redis
   become: yes
