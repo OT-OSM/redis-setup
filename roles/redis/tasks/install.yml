@@ -19,6 +19,7 @@
   when: >
     not redis_status.stat.exists or
     upgrade_redis
+  become: yes
 
 - name: Ensuring the redis server is installed
   make:
@@ -27,3 +28,4 @@
   when: >
     not redis_status.stat.exists or
     upgrade_redis
+  become: yes
