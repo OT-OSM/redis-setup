@@ -11,5 +11,5 @@
   fail:
     msg: "Setup execution failed because the {{ ansible_os_family }} is not supported"
   when: >
-    ansible_os_family != "Debian" or
+    ansible_os_family != "Debian" and
     ansible_os_family != "RedHat"
