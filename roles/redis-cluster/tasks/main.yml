@@ -9,9 +9,9 @@
   when: >
     inventory_hostname in groups['follower']
 
-- name: Setup of redis sharded cluster setup
+- name: Setup of redis sharded cluster on nodes
   include: sharded-cluster.yml
   when: >
     setup_mode == "sharded" and
-    {{ groups['leader'] | length }} > 1 and
-    {{ groups['follower'] | length }} > 1
+    groups['leader'] | length > 1 and
+    groups['follower'] | length > 1
