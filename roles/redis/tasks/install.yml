@@ -58,16 +58,3 @@
     system: yes
     state: present
   become: yes
-
-- name: Ensure the configuration directories are present
-  file:
-    path: "{{ item }}"
-    state: directory
-    recurse: yes
-    owner: redis
-    group: redis
-  with_items:
-    - "{{ redis_log_dir }}"
-    - "{{ redis_data_dir }}"
-    - "{{ redis_conf_file_location }}"
-  become: yes
