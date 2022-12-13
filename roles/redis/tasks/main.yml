@@ -4,3 +4,6 @@
 
 - name: Ensuring preinstall packages and configurations
   include_tasks: preinstall.yml
+
+- name: Ensuring redis server is installed on the system
+  include_tasks: install.yml
