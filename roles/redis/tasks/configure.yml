@@ -1,0 +1,19 @@
+---
+- name: Ensure that redis service exists on the system
+  template:
+    src: redis.service.j2
+    dest: "/etc/systemd/system/redis.service"
+    owner: root
+    group: root
+  notify:
+    - Ensure system daemon reloaded
+
+- name: Ensure the redis configuration is updated
+  template:
+    src: redis.conf.j2
+    dest: "{{ redis_conf_file_location }}/redis.conf"
+    owner: redis
+    group: redis
+  notify:
+    - Ensure redis service is running
+

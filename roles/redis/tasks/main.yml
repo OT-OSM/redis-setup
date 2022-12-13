@@ -7,3 +7,7 @@
 
 - name: Ensuring redis server is installed on the system
   include_tasks: install.yml
+
+- name: Ensuring redis configuration is up to date
+  include_tasks: configure.yml
+  when: groups['redis_cluster'] is not defined
