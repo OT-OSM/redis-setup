@@ -1,0 +1,19 @@
+---
+- name: Ensure system daemon reloaded
+  systemd:
+    daemon_reload: yes
+  become: yes
+
+- name: Ensure redis leader service is running
+  systemd:
+    name: redis-leader.service
+    enabled: yes
+    state: restarted
+  become: yes
+
+- name: Ensure redis follower service is running
+  systemd:
+    name: redis-follower.service
+    enabled: yes
+    state: restarted
+  become: yes

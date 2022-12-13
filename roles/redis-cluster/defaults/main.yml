@@ -1,15 +1,3 @@
----
-## COMMON VARIABLES
-upgrade_redis: false
-
-redis_version: 7.0.6
-redis_port: 6379
-
-redis_conf_file_location: /etc/redis
-redis_data_dir: /opt/redis/data
-redis_log_dir: /var/log/redis
-redis_logfile: "/var/log/redis/redis.log"
-
 # GENERAL CONFIGURATION
 redis_supervised: "no"
 redis_always_show_logo: "yes"
@@ -18,6 +6,11 @@ redis_pidfile: "/var/run/redis-{{- redis_port -}}.pid"
 # Number of databases to allow
 redis_databases: 16
 redis_loglevel: notice
+
+# CLUSTER
+# redis_cluster_replicas: 0
+redis_cluster_node_timeout: 5000
+redis_cluster_config_file: /etc/redis/cluster/nodes.conf
 
 # SNAPSHOTTING
 # How frequently to snapshot the database to disk
@@ -65,9 +58,8 @@ redis_timeout: 0
 redis_socket_path: false
 redis_socket_perm: 755
 
-redis_conf_file_location: /etc/redis
+redis_conf_file_location: /etc/redis/cluster
 redis_runtime_directory: redis
-
 
 # Disable command
 disable_commands:
