@@ -1,0 +1,10 @@
+---
+- hosts: redis_cluster
+  tasks:
+    - include: add-redis-leader.yml
+      vars:
+        new_leader_node: "{{ item }}"
+      with_items:
+        - groups['leader']
+      when: >
+        inventory_hostname in groups['leader'][0]
