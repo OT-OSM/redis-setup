@@ -33,4 +33,4 @@
     group: redis
   become: yes
   notify:
-    - Ensure redis follower is running
+    - Ensure redis follower service is running
