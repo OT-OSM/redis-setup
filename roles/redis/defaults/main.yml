@@ -3,6 +3,7 @@
 upgrade_redis: false
 
 redis_version: 7.0.6
+redis_port: 6379
 
 redis_conf_file_location: /etc/redis
 redis_data_dir: /opt/redis/data
