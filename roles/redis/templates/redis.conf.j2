@@ -20,13 +20,6 @@ loglevel {{ redis_loglevel }}
 databases {{ redis_databases }}
 logfile {{ redis_logfile }}
 
-#cluster
-{% if cluster_enabled == true %}
-cluster-enabled yes
-cluster-node-timeout {{redis_cluster_node_timeout}}
-cluster-config-file {{redis_cluster_config_file}}
-{% endif %}
-
 # Snapshotting
 {% for save in redis_save %}
 save {{ save }}
@@ -35,7 +28,7 @@ stop-writes-on-bgsave-error {{ redis_stop_writes_on_bgsave_error|string }}
 rdbcompression {{ redis_rdbcompression|string }}
 rdbchecksum {{ redis_rdbchecksum|string }}
 dbfilename {{ redis_db_filename|string }}
-dir {{ redis_dir }}
+dir {{ redis_data_dir }}
 
 # Disable Redis commands
 {% for disable_command in disable_commands %}
@@ -69,7 +62,3 @@ latency-monitor-threshold 0
 {% if redis_password -%}
 requirepass {{ redis_password }}
 {%- endif %}
-
-{% if cluster_enabled == true and redis_password %}
-masterauth {{ redis_password }}
-{% endif %}
