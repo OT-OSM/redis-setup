@@ -4,10 +4,12 @@
     name: "build-essential"
     state: present
     update_cache: yes
+  become: yes
   when: ansible_os_family == "Debian"
 
 - name: Installing development tools on RedHat System
   yum:
     name: "make"
     state: present
+  become: yes
   when: ansible_os_family == "RedHat"
