@@ -4,7 +4,7 @@
     msg: "Setup execution failed due to missing group"
   when: >
     groups['redis_cluster'] is not defined and
-    groups['standalone'] is not defined and
+    groups['redis'] is not defined and
     groups['sentinel'] is not defined
 
 - name: Ensuring OS is supported by the automation
