@@ -2,3 +2,5 @@
 - name: Ensuring pre-requisities are in-place
   include_tasks: prerequisities.yml
 
+- name: Ensuring preinstall packages and configurations
+  include_tasks: preinstall.yml

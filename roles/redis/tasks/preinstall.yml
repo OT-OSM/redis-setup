@@ -1,0 +1,13 @@
+---
+- name: Install build time dependencies and update repo
+  apt:
+    name: "build-essential"
+    state: present
+    update_cache: yes
+  when: ansible_os_family == "Debian"
+
+- name: Installing development tools on RedHat System
+  yum:
+    name: "make"
+    state: present
+  when: ansible_os_family == "RedHat"
