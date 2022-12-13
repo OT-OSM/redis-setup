@@ -1,9 +1,9 @@
 ---
-- name: Ensure that redis service exists on the system
+- name: Ensure system daemon reloaded
   systemd:
     daemon_reload: yes
 
-- name: Ensure the redis configuration is updated
+- name: Ensure redis service is running
   systemd:
     name: redis.service
     enabled: yes
