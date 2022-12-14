@@ -19,7 +19,7 @@
 - name: Ensuring redis follower nodes are part of the cluster
   command: >-
     {{ redis_command }} --cluster add-node
-    {{ hostvars[item]['ansible_default_ipv4']['address'] }}:{{ follower_redis_port }}
+    {{ new_follower_node }}:{{ follower_redis_port }}
     {{ hostvars[groups['leader'][(hostvars[item]['leader_id'])]].ansible_default_ipv4.address }}:{{ leader_redis_port }}
     --cluster-slave
   args:
