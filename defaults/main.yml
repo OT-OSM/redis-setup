@@ -73,11 +73,37 @@ disable_commands:
 
 ## Sentinel Config 
 
-group_name: mymaster
-master_ip :  127.0.0.1 
-master_port : 6379
-quorum: 2 
-failover_timeout: 180000
-parallel_syncs: 1
-down_after : 60000
-sentinel_conf_file_location: /etc/redis/sentinel
+# group_name: mymaster
+# master_ip :  127.0.0.1 
+# master_port : 6379
+# quorum: 2 
+# failover_timeout: 180000
+# parallel_syncs: 1
+# down_after : 60000
+# sentinel_conf_file_location: /etc/redis/sentinel
+
+
+## Redis sentinel configs
+# Set this to true on a host to configure it as a Sentinel
+redis_sentinel: false
+redis_sentinel_protected_mode: "yes"
+redis_sentinel_dir: /var/lib/redis/sentinel_{{ redis_sentinel_port }}
+redis_sentinel_bind: 0.0.0.0
+redis_sentinel_port: 26379
+redis_sentinel_password: false
+redis_sentinel_pidfile: /var/run/redis/sentinel_{{ redis_sentinel_port }}.pid
+redis_sentinel_logfile: '""'
+redis_sentinel_syslog_ident: sentinel_{{ redis_sentinel_port }}
+redis_sentinel_oom_score_adjust: 0
+redis_sentinel_monitors:
+  - name: master01
+    host: localhost
+    port: 6379
+    quorum: 2
+    auth_pass: ant1r3z
+    down_after_milliseconds: 30000
+    parallel_syncs: 1
+    failover_timeout: 180000
+    notification_script: false
+    client_reconfig_script: false
+    rename_commands: []
