@@ -20,7 +20,7 @@
     name: redis-cluster
     tasks_from: leader.yml
   when: >
-    ansible_host not in command_result.stdout
+    command_result.stdout.find('{{ ansible_ssh_host }}') == -1
 #
 #- name: Ensure the new leader nodes are added to the cluster
 #  command: |-
