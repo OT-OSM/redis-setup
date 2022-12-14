@@ -34,3 +34,6 @@
   become: yes
   notify:
     - Ensure redis follower service is running
+
+- name: Ensuring that handlers are executed for follower
+  meta: flush_handlers

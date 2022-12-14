@@ -15,6 +15,13 @@
     inventory_hostname in groups['leader'][0]
   register: command_result
 
+- name: Ensuring all the redis leader configurations are placed
+  include_role:
+    name: redis-cluster
+    tasks_from: leader.yml
+  when: >
+    hostvars[inventory_hostname]['ansible_default_ipv4']['address'] not in command_result.stdout
+
 - name: Ensure the new leader nodes are added to the cluster
   command: |-
     {{ redis_command }} --cluster add-node 

@@ -34,3 +34,6 @@
   become: yes
   notify:
     - Ensure redis leader service is running
+
+- name: Ensuring that handlers are executed for leader
+  meta: flush_handlers
