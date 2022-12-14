@@ -10,26 +10,21 @@
   when: redis_password is defined and redis_password != ""
 
 - name: Ensure if redis cluster exists or not
-  command: "{{ redis_command }} cluster nodes"
-  when: >
-    inventory_hostname in groups['leader'][0]
+  command: |-
+    {{ redis_command }} cluster nodes
   register: command_result
 
-- name: Print debug
-  debug:
-    msg: "{{ command_result }}"
+- name: Ensuring all the redis leader configurations are placed
+  include_role:
+    name: redis-cluster
+    tasks_from: leader.yml
+  when: >
+    command_result.stdout.find(ansible_ssh_host) == -1
 
-#- name: Ensuring all the redis leader configurations are placed
-#  include_role:
-#    name: redis-cluster
-#    tasks_from: leader.yml
-#  when: >
-#    command_result.stdout.find('{{ ansible_ssh_host }}') == -1
-#
-#- name: Ensure the new leader nodes are added to the cluster
-#  command: |-
-#    {{ redis_command }} --cluster add-node
-#    {{ new_leader_node }}:{{ leader_redis_port }} {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ leader_redis_port }}
-#  when: >
-#    inventory_hostname in groups['leader'][0] and
-#    new_leader_node not in command_result.stdout
+- name: Ensure the new leader nodes are added to the cluster
+  command: |-
+    {{ redis_command }} --cluster add-node
+    {{ new_leader_node }}:{{ leader_redis_port }} {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ leader_redis_port }}
+  when: >
+    inventory_hostname in groups['leader'][0] and
+    new_leader_node not in command_result.stdout
