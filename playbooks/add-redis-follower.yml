@@ -35,4 +35,5 @@
     - "{{ groups['follower'] }}"
   when:
     inventory_hostname in groups['leader'][0] and
-    groups['follower'] is defined
+    groups['follower'] is defined and
+    "{{ new_leader_node }}:{{ follower_redis_port}}" not in command_result.stdout
