@@ -15,7 +15,8 @@
         tasks_from: leader.yml
       when: >
         inventory_hostname in groups['leader']
-    - include: add-redis-leader.yml
+    - name: Ensuring leader additional playbook is included
+      include: add-redis-leader.yml
       vars:
         new_leader_node: "{{ item }}"
       with_items:
@@ -26,7 +27,8 @@
         tasks_from: follower.yml
       when: >
         inventory_hostname in groups['follower']
-    - include: add-redis-follower.yml
+    - name: Ensuring follower additional playbook is included
+      include: add-redis-follower.yml
       vars:
         new_follower_node: "{{ item }}"
       with_items:
