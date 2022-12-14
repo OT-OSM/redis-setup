@@ -26,5 +26,5 @@
         {{ new_leader_node }}:{{ leader_redis_port }} {{ groups['leader'][0] }}:{{ leader_redis_port }}
       when: >
         inventory_hostname in groups['leader'][0] and
-        new_leader_node in command_result.stdout
+        new_leader_node not in command_result.stdout
         command_result.stdout.split('\n')|length < groups['leader']|length
