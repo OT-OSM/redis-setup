@@ -31,8 +31,6 @@
     --cluster-slave
   args:
     stdin: "yes"
-  with_items:
-    - "{{ groups['follower'] }}"
   when:
     inventory_hostname in groups['leader'][0] and
     new_follower_node + ':' + follower_redis_port|string not in command_result.stdout
