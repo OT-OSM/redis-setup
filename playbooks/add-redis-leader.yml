@@ -13,7 +13,9 @@
   include_role:
     name: redis-cluster
     tasks_from: leader.yml
-    
+  when: >
+    inventory_hostname in groups['leader']
+
 - name: Ensure if redis cluster exists or not
   command: |-
     {{ redis_command }} cluster nodes
