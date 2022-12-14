@@ -20,12 +20,12 @@
     name: redis-cluster
     tasks_from: leader.yml
   when: >
-    ansible_ssh_host not in command_result.stdout
-
-- name: Ensure the new leader nodes are added to the cluster
-  command: |-
-    {{ redis_command }} --cluster add-node 
-    {{ new_leader_node }}:{{ leader_redis_port }} {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ leader_redis_port }}
-  when: >
-    inventory_hostname in groups['leader'][0] and
-    new_leader_node not in command_result.stdout
+    ansible_host not in command_result.stdout
+#
+#- name: Ensure the new leader nodes are added to the cluster
+#  command: |-
+#    {{ redis_command }} --cluster add-node
+#    {{ new_leader_node }}:{{ leader_redis_port }} {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ leader_redis_port }}
+#  when: >
+#    inventory_hostname in groups['leader'][0] and
+#    new_leader_node not in command_result.stdout
