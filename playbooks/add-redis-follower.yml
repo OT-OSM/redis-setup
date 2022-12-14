@@ -9,13 +9,6 @@
     redis_command: "redis-cli -a {{ redis_password }}"
   when: redis_password is defined and redis_password != ""
 
-- name: Ensuring all the redis follower configurations are placed
-  include_role:
-    name: redis-cluster
-    tasks_from: follower.yml
-  when: >
-    inventory_hostname in groups['follower']
-
 - name: Ensure if redis cluster exists or not
   command: |-
     {{ redis_command }} cluster nodes

@@ -9,11 +9,23 @@
     leader_redis_port: 6379
     follower_redis_port: 6380
   tasks:
+    - name: Ensuring all the redis leader configurations are placed
+      include_role:
+        name: redis-cluster
+        tasks_from: leader.yml
+      when: >
+        inventory_hostname in groups['leader']
     - include: add-redis-leader.yml
       vars:
         new_leader_node: "{{ item }}"
       with_items:
         - "{{ groups['leader'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) }}"
+    - name: Ensuring all the redis follower configurations are placed
+      include_role:
+        name: redis-cluster
+        tasks_from: follower.yml
+      when: >
+        inventory_hostname in groups['follower']
     - include: add-redis-follower.yml
       vars:
         new_follower_node: "{{ item }}"
