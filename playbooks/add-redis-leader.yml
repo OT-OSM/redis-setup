@@ -15,12 +15,16 @@
     inventory_hostname in groups['leader'][0]
   register: command_result
 
-- name: Ensuring all the redis leader configurations are placed
-  include_role:
-    name: redis-cluster
-    tasks_from: leader.yml
-  when: >
-    command_result.stdout.find('{{ ansible_ssh_host }}') == -1
+- name: Print debug
+  debug:
+    msg: command_result
+
+#- name: Ensuring all the redis leader configurations are placed
+#  include_role:
+#    name: redis-cluster
+#    tasks_from: leader.yml
+#  when: >
+#    command_result.stdout.find('{{ ansible_ssh_host }}') == -1
 #
 #- name: Ensure the new leader nodes are added to the cluster
 #  command: |-
