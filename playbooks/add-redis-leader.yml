@@ -9,17 +9,17 @@
     redis_command: "redis-cli -a {{ redis_password }}"
   when: redis_password is defined and redis_password != ""
 
+- name: Ensuring all the redis leader configurations are placed
+  include_role:
+    name: redis-cluster
+    tasks_from: leader.yml
+    
 - name: Ensure if redis cluster exists or not
   command: |-
     {{ redis_command }} cluster nodes
   when: >
     inventory_hostname in groups['leader'][0]
   register: command_result
-
-- name: Ensuring all the redis leader configurations are placed
-  include_role:
-    name: redis-cluster
-    tasks_from: leader.yml
 
 - name: Ensure the new leader nodes are added to the cluster
   command: |-
