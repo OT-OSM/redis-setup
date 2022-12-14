@@ -9,12 +9,12 @@
     redis_command: "redis-cli -a {{ redis_password }}"
   when: redis_password is defined and redis_password != ""
 
-- name: Ensuring all the redis leader configurations are placed
+- name: Ensuring all the redis follower configurations are placed
   include_role:
     name: redis-cluster
-    tasks_from: leader.yml
+    tasks_from: follower.yml
   when: >
-    inventory_hostname in groups['leader']
+    inventory_hostname in groups['follower']
 
 - name: Ensure if redis cluster exists or not
   command: |-
@@ -23,11 +23,16 @@
     inventory_hostname in groups['leader'][0]
   register: command_result
 
-- name: Ensure the new leader nodes are added to the cluster
-  command: |-
+- name: Ensuring redis follower nodes are part of the cluster
+  command: >-
     {{ redis_command }} --cluster add-node
-    {{ new_leader_node }}:{{ leader_redis_port }} 
-    {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ leader_redis_port }}
-  when: >
+    {{ hostvars[item]['ansible_default_ipv4']['address'] }}:{{ follower_redis_port }}
+    {{ hostvars[groups['leader'][(hostvars[item]['leader_id'])]].ansible_default_ipv4.address }}:{{ leader_redis_port }}
+    --cluster-slave
+  args:
+    stdin: "yes"
+  with_items:
+    - "{{ groups['follower'] }}"
+  when:
     inventory_hostname in groups['leader'][0] and
-    new_leader_node:leader_redis_port not in command_result.stdout
+    groups['follower'] is defined
