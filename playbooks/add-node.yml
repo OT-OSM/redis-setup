@@ -15,3 +15,7 @@
       with_items:
         - "{{ groups['leader'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) }}"
     - include: add-redis-follower.yml
+      vars:
+        new_follower_node: "{{ item }}"
+      with_items:
+        - "{{ groups['follower'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) }}"
