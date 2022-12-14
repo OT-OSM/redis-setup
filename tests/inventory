@@ -27,6 +27,7 @@ masternode1
 redis_port=6379
 master_redis_port=6379
 slave_redis_port=6380
+sentinel_port=26379
 
 [all:vars]
 ansible_python_interpreter=/usr/bin/python3

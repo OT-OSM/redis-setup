@@ -1,0 +1,12 @@
+---
+
+- name: Copy sentine.conf to sentinel server 
+  template: 
+    src : sentinel.conf.j2
+    dest : "{{sentinel_conf_file_location}}/sentinel.conf"
+    owner : redis
+    group : redis
+  vars: 
+    sentinel_port : "{{sentinel_port}}"
+  notify:
+    - Start Redis Sentinel Service

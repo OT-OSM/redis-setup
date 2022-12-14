@@ -17,6 +17,13 @@
     enabled: yes
     state: restarted
 
+- name:  Start Redis Sentinel Service
+  systemd : 
+    name:  redis-sentinel.service
+    enabled: yes 
+    state : restarted
+    
+    
 - name: Reload systemd daemon
   systemd:
     daemon_reload: yes

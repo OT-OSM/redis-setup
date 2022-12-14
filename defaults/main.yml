@@ -69,3 +69,15 @@ redis_version: stable
 disable_commands:
   - FLUSHDB
   - FLUSHALL
+
+
+## Sentinel Config 
+
+group_name: mymaster
+master_ip :  127.0.0.1 
+master_port : 6379
+quorum: 2 
+failover_timeout: 180000
+parallel_syncs: 1
+down_after : 60000
+sentinel_conf_file_location: /etc/redis/sentinel

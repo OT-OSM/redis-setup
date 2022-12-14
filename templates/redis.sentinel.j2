@@ -1,0 +1,6 @@
+---
+
+sentinel monitor {{group_name}} {{master_ip}} {{master_port}} {{quorum}}
+sentinel down-after-milliseconds {{group_name}} {{down_after}}
+sentinel failover-timeout {{group_name}} {{failover_timeout}}
+sentinel parallel-syncs {{group_name}} {{parallel_syncs}}
