@@ -37,7 +37,7 @@
         - "{{ lookup('file', '/tmp/node-removal') }}"
       when: >
         inventory_hostname in groups['leader'][0] and
-        {{ lookup('file', '/tmp/node-removal') }}|length > 0
+        lookup('file', '/tmp/node-removal')|length > 0
 
     - name: Ensuring the temporary file is removed after execution
       file:
