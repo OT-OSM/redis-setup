@@ -29,7 +29,7 @@
 
     - name: Finding the nodes that need to be removed
       debug:
-        msg: "{{ item.split(' ') }}"
+        msg: "{{ item.split(' ')[0] }}"
       with_items:
         - "{{ lookup('file', '/tmp/node-removal') }}"
       when: >
