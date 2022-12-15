@@ -28,5 +28,5 @@
       with_items:
         - groups['redis_cluster']
       when: >
-        node_status == 'remove'
+        node_status == 'remove' and
         inventory_hostname in groups['leader'][0]
