@@ -22,7 +22,7 @@
 
     - name: Finding the nodes that need to be removed
       debug:
-        msg: "{{ command_result.stdout_lines | select("search", ansible_ssh_host) }}"
+        msg: "{{ command_result.stdout_lines | select(ansible_ssh_host) }}"
       with_items:
         - groups['redis_cluster']
       when: >
