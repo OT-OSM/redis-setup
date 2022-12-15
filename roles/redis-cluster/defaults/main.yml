@@ -65,3 +65,11 @@ redis_runtime_directory: redis
 disable_commands:
   - FLUSHDB
   - FLUSHALL
+
+# Replication
+redis_slave_read_only: "yes"
+redis_slave_priority: 100
+redis_repl_backlog_size: false
+redis_min_slaves_to_write: 0
+redis_min_slaves_max_lag: 10
+redis_slaveof: false

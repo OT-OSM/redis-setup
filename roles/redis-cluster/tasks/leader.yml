@@ -25,7 +25,7 @@
   notify:
     - Ensure system daemon reloaded
 
-- name: Ensure the redis configuration is updated (Leader)
+- name: Ensure the redis sharded configuration is updated (Leader)
   template:
     src: redis.conf.j2
     dest: "{{ redis_conf_file_location }}/redis.conf"
@@ -34,6 +34,22 @@
   become: yes
   notify:
     - Ensure redis leader service is running
+  when: >
+    setup_mode == "sharded" and
+    groups['leader'] | length > 1
+
+- name: Ensure the redis replicated configuration is updated (Leader)
+  template:
+    src: redis.replicated.conf.j2
+    dest: "{{ redis_conf_file_location }}/redis.conf"
+    owner: redis
+    group: redis
+  become: yes
+  notify:
+    - Ensure redis leader service is running
+  when: >
+    setup_mode == "replicated" and
+    groups['leader'] | length == 1
 
 - name: Ensuring that handlers are executed for leader
   meta: flush_handlers

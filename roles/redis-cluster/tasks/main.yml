@@ -15,3 +15,9 @@
     setup_mode == "sharded" and
     groups['leader'] | length > 1 and
     groups['follower'] | length > 1
+
+- name: Setup of redis sharded cluster on nodes
+  include: replicated-cluster.yml
+  when: >
+    setup_mode == "replicated" and
+    groups['leader'] | length == 1
