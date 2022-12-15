@@ -18,8 +18,6 @@
     - name: Ensure if redis cluster exists or not
       command: |-
         {{ redis_command }} cluster nodes
-      when: >
-        inventory_hostname in groups['leader'][0]
       register: command_result
 
     - name: Ensure the nodes need to removed are present in temporary file
