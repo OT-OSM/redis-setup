@@ -9,7 +9,7 @@
       local_action:
         module: file
         path: /tmp/node-removal
-        state: present
+        state: touch
 
     - name: Ensure redis-cli is generated without password
       set_fact:
