@@ -1,0 +1,32 @@
+---
+- hosts: redis_cluster
+  vars:
+    redis_password: Opstree@1234
+    leader_redis_port: 6379
+    follower_redis_port: 6380
+  tasks:
+    - name: Ensure redis-cli is generated without password
+      set_fact:
+        redis_command: redis-cli
+      when: redis_password == ""
+
+    - name: Ensure redis-cli is generated with password
+      set_fact:
+        redis_command: "redis-cli -a {{ redis_password }}"
+      when: redis_password is defined and redis_password != ""
+
+    - name: Ensure if redis cluster exists or not
+      command: |-
+        {{ redis_command }} cluster nodes
+      when: >
+        inventory_hostname in groups['leader'][0]
+      register: command_result
+
+    - name: Finding the nodes that need to be removed
+      debug:
+        msg: "{{ command_result.stdout.find(hostvars[item]['ansible_default_ipv4']['address']) }}"
+      with_items:
+        - groups['redis_cluster']
+      when: >
+        node_status == 'remove'
+        inventory_hostname in groups['leader'][0]
