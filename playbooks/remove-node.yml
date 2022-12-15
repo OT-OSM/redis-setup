@@ -29,6 +29,8 @@
 
     - name: Finding the nodes that need to be removed
       debug:
-        msg: "{{ lookup('file', '/tmp/node-removal') }}"
+        msg: "{{ item }}"
+      with_items:
+        - "{{ lookup('file', '/tmp/node-removal') }}"
       when: >
         inventory_hostname in groups['leader'][0]
