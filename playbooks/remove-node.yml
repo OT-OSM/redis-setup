@@ -21,13 +21,14 @@
       register: command_result
 
     - name: Ensure the nodes need to removed are present in temporary file
-      local_action:
-        module: copy
+      copy:
         content: "{{ command_result.stdout_lines | select('search', ansible_ssh_host) }}"
         dest: /tmp/node-removal
+      when: >
+        inventory_hostname in groups['leader'][0]
 
     - name: Finding the nodes that need to be removed
       debug:
-        msg: "{{ command_result.stdout_lines | select('search', ansible_ssh_host) }}"
+        msg: "{{ lookup('file', '/tmp/node-removal') }}"
       when: >
-        node_status == 'remove'
+        inventory_hostname in groups['leader'][0]
