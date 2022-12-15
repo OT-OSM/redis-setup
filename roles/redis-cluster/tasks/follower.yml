@@ -40,7 +40,7 @@
 
 - name: Ensuring the slaveof variables is set for Followers
   set_fact:
-    redis_slaveof:  "{{ groups['leader'][0] }} {{ redis_leader_port }}"
+    redis_slaveof:  "{{ groups['leader'][0] }} hostvars[groups['leader'][0]]['redis_port']"
   when: >
     groups['follower']
 
