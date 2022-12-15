@@ -18,6 +18,8 @@
     - name: Ensure if redis cluster exists or not
       command: |-
         {{ redis_command }} cluster nodes
+      when: >
+        inventory_hostname in groups['leader'][0]
       register: command_result
 
     - name: Ensure the nodes need to removed are present in temporary file
@@ -27,11 +29,19 @@
       when: >
         inventory_hostname in groups['leader'][0]
 
-    - name: Finding the nodes that need to be removed
+    - name: Ensuring the removed marked nodes are not part of the cluster
       command: |-
         {{ redis_command }} --cluster del-node 
         {{ ansible_ssh_host }}:{{ leader_redis_port }} {{ item.split(' ')[0] }}
       with_items:
         - "{{ lookup('file', '/tmp/node-removal') }}"
+      when: >
+        inventory_hostname in groups['leader'][0] and
+        {{ lookup('file', '/tmp/node-removal') }}|length > 0
+
+    - name: Ensuring the temporary file is removed after execution
+      file:
+        path: /tmp/node-removal
+        state: absent
       when: >
         inventory_hostname in groups['leader'][0]
