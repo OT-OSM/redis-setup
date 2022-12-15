@@ -5,6 +5,12 @@
     leader_redis_port: 6379
     follower_redis_port: 6380
   tasks:
+    - name: Ensuring the temporary file is removed after execution
+      local_action:
+        module: file
+        path: /tmp/node-removal
+        state: present
+
     - name: Ensure redis-cli is generated without password
       set_fact:
         redis_command: redis-cli
@@ -39,8 +45,7 @@
         lookup('file', '/tmp/node-removal')|length > 0
 
     - name: Ensuring the temporary file is removed after execution
-      file:
+      local_action:
+        module: file
         path: /tmp/node-removal
         state: absent
-      when: >
-        inventory_hostname in groups['leader'][0]
