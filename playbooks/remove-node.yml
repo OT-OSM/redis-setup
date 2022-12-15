@@ -21,7 +21,7 @@
       register: command_result
 
     - name: Ensure the nodes need to removed are present in temporary file
-      local:
+      local_action:
         module: copy
         content: "{{ command_result.stdout_lines | select('search', ansible_ssh_host) }}"
         dest: /tmp/node-removal
