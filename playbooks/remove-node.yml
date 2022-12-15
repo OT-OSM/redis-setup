@@ -27,7 +27,7 @@
         content: "{{ command_result.stdout_lines | select('search', ansible_ssh_host) }}"
         dest: /tmp/node-removal
       when: >
-        inventory_hostname in groups['leader'][0]
+        node_status == 'remove'
 
     - name: Ensuring the removed marked nodes are not part of the cluster
       command: |-
