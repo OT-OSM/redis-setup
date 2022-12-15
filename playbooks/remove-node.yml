@@ -29,9 +29,8 @@
 
     - name: Finding the nodes that need to be removed
       command: |-
-        {{ redis_command }} --cluster del-node {{ item.split(' ')[0] }}
-#      debug:
-#        msg: "{{ item.split(' ')[0] }}"
+        {{ redis_command }} --cluster del-node 
+        {{ ansible_ssh_host }}:{{ leader_redis_port }} {{ item.split(' ')[0] }}
       with_items:
         - "{{ lookup('file', '/tmp/node-removal') }}"
       when: >
