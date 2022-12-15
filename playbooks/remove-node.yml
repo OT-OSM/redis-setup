@@ -29,7 +29,7 @@
     - name: Ensure the nodes need to removed are present in temporary file
       local_action:
         module: copy
-        content: "{{ command_result.stdout_lines | select('search', ansible_ssh_host + ':' + redis_port) }}"
+        content: "{{ command_result.stdout_lines | select('search', ansible_ssh_host + ':' + redis_port|str) }}"
         dest: /tmp/node-removal
       when: >
         node_status == 'remove'
