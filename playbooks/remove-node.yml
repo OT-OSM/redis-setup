@@ -26,4 +26,4 @@
       with_items:
         - groups['redis_cluster']
       when: >
-        node_status == 'remove' and
+        node_status == 'remove'
