@@ -18,15 +18,12 @@
     - name: Ensure if redis cluster exists or not
       command: |-
         {{ redis_command }} cluster nodes
-      when: >
-        inventory_hostname in groups['leader'][0]
       register: command_result
 
     - name: Finding the nodes that need to be removed
       debug:
-        msg: "{{ command_result.stdout.find(hostvars[item]['ansible_default_ipv4']['address']) }}"
+        msg: "{{ command_result.stdout_lines | select("search", ansible_ssh_host) }}"
       with_items:
         - groups['redis_cluster']
       when: >
         node_status == 'remove' and
-        inventory_hostname in groups['leader'][0]
