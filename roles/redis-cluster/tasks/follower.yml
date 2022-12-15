@@ -55,7 +55,7 @@
     - Ensure redis follower service is running
   when: >
     setup_mode == "replicated" and
-    groups['leader'] | length > 1
+    groups['leader'] | length == 1
 
 - name: Ensuring that handlers are executed for follower
   meta: flush_handlers
