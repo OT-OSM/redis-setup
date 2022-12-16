@@ -21,6 +21,7 @@
     src: /tmp/redis_exporter-{{ exporter_version }}.linux-amd64/redis_exporter
     dest: /usr/local/bin/redis_exporter
     remote_src: yes
+    mode: 0555
   when: >
     not redis_exporter_status.stat.exists
   become: yes
