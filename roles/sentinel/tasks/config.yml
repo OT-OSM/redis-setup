@@ -9,7 +9,7 @@
   notify:
     - Ensure system daemon reloaded
 
-- name: Ensure the redis sharded configuration is updated (Leader)
+- name: Ensure the sentinel configuration is updated
   template:
     src: sentinel.conf.j2
     dest: "{{ redis_conf_file_location }}/sentinel.conf"
