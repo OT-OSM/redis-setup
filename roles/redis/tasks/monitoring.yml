@@ -9,7 +9,7 @@
     redis_exporter_url: https://github.com/oliver006/redis_exporter/releases/download
 
 - name: Ensure that redis exporter package is downloaded and unarchived
-  unarhive:
+  unarchive:
     src: "{{ redis_exporter_url }}/{{ exporter_version }}/redis_exporter-{{ exporter_version }}.linux-amd64.tar.gz"
     dest: /tmp
     remote_src: yes
