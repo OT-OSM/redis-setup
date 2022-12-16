@@ -1,0 +1,9 @@
+#SENTINEL BASIC CONFIGURATION
+port {{ redis_sentinel_port }}
+
+sentinel monitor {{ sentinel_master_name }} groups.leader[0] {{ redis_leader_port }} {{ quorum_count }}
+sentinel auth-pass {{ sentinel_master_name }} {{ redis_password }}
+
+sentinel down-after-milliseconds {{ sentinel_master_name }} {{ down_after_milliseconds }}
+sentinel failover-timeout {{ sentinel_master_name }} {{ failover_timeout }}
+sentinel parallel-syncs {{ sentinel_master_name }} {{ parallel_syncs }}

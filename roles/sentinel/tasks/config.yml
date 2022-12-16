@@ -1,0 +1,23 @@
+---
+- name: Ensure that redis sentinel service exists on the system
+  template:
+    src: redis-sentinel.service.j2
+    dest: "/etc/systemd/system/redis-sentinel.service"
+    owner: root
+    group: root
+  become: yes
+  notify:
+    - Ensure system daemon reloaded
+
+- name: Ensure the redis sharded configuration is updated (Leader)
+  template:
+    src: sentinel.conf.j2
+    dest: "{{ redis_conf_file_location }}/sentinel.conf"
+    owner: redis
+    group: redis
+  become: yes
+  notify:
+    - Ensure sentinel service is running
+
+- name: Ensuring that handlers are executed for sentinel
+  meta: flush_handlers

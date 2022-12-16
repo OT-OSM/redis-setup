@@ -1,0 +1,3 @@
+---
+sentinel_master_name: mymaster
+redis_password: Opstree@1234
