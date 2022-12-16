@@ -51,5 +51,19 @@
     setup_mode == "replicated" and
     groups['leader'] | length == 1
 
+- name: Ensure that redis leader exporter service exists
+  template:
+    src: redis-exporter.service.j2
+    dest: "/etc/systemd/system/redis-leader-exporter.service"
+    owner: root
+    group: root
+  become: yes
+  notify:
+    - Ensure system daemon reloaded
+    - Ensure redis exporter service is running
+  when: >
+    inventory_hostname in groups['leader]' and
+    redis_monitoring_enabled
+
 - name: Ensuring that handlers are executed for leader
   meta: flush_handlers
