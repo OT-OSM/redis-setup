@@ -11,7 +11,7 @@
     state: restarted
   become: yes
 
-- name: EEnsure redis exporter service is running
+- name: Ensure redis exporter service is running
   systemd:
     name: redis-exporter.service
     enabled: yes
