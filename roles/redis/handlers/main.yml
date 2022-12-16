@@ -10,3 +10,10 @@
     enabled: yes
     state: restarted
   become: yes
+
+- name: EEnsure redis exporter service is running
+  systemd:
+    name: redis-exporter.service
+    enabled: yes
+    state: restarted
+  become: yes
