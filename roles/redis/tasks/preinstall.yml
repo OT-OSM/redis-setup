@@ -1,0 +1,35 @@
+---
+- name: Ensure build tools are installed on the system (Debian)
+  apt:
+    name: "build-essential"
+    state: present
+    update_cache: yes
+  become: yes
+  when: ansible_os_family == "Debian"
+
+- name: Ensure build tools are installed on the system (RedHat)
+  yum:
+    name: "make"
+    state: present
+  become: yes
+  when: ansible_os_family == "RedHat"
+
+- name: Ensuring redis performance parameters are defined
+  sysctl:
+    name: vm.overcommit_memory
+    value: "1"
+    state: present
+  become: yes
+
+- name: Ensuring the maximum number of connection count is set
+  sysctl:
+    name: net.core.somaxconn
+    value: "65365"
+    state: present
+  become: yes
+
+- name: Ensure that transparent huge page is disabled in Kernel
+  shell: "echo never > /sys/kernel/mm/transparent_hugepage/enabled"
+  become: yes
+  become_user: root
+  changed_when: False

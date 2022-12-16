@@ -1,0 +1,13 @@
+---
+- name: Ensuring pre-requisities are in-place
+  include_tasks: prerequisities.yml
+
+- name: Ensuring preinstall packages and configurations
+  include_tasks: preinstall.yml
+
+- name: Ensuring redis server is installed on the system
+  include_tasks: install.yml
+
+- name: Ensuring redis configuration is up to date
+  include_tasks: configure.yml
+  when: groups['redis_cluster'] is not defined

@@ -1,0 +1,17 @@
+---
+- name: Ensure the configurations for redis leader is included
+  include: leader.yml
+  when: >
+    inventory_hostname in groups['leader']
+
+- name: Ensure the configurations for redis follower is included
+  include: follower.yml
+  when: >
+    inventory_hostname in groups['follower']
+
+- name: Setup of redis sharded cluster on nodes
+  include: sharded-cluster.yml
+  when: >
+    setup_mode == "sharded" and
+    groups['leader'] | length > 1 and
+    groups['follower'] | length > 1

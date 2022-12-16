@@ -1,0 +1,4 @@
+---
+redis_password: "Opstree@1234"
+upgrade_redis: false
+redis_runtime_directory: redis

@@ -1,0 +1,9 @@
+---
+redis_conf_file_location: /etc/redis
+redis_runtime_directory: redis
+redis_sentinel_port: 26379
+redis_leader_port: 6379
+
+down_after_milliseconds: 5000
+failover_timeout: 180000
+parallel_syncs: 1

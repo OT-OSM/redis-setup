@@ -1,0 +1,33 @@
+---
+- name: Ensure the configuration directories are present
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+    owner: redis
+    group: redis
+  with_items:
+    - "{{ redis_log_dir }}"
+    - "{{ redis_data_dir }}"
+    - "{{ redis_conf_file_location }}"
+  become: yes
+
+- name: Ensure that redis service exists on the system
+  template:
+    src: redis.service.j2
+    dest: "/etc/systemd/system/redis.service"
+    owner: root
+    group: root
+  become: yes
+  notify:
+    - Ensure system daemon reloaded
+
+- name: Ensure the redis configuration is updated
+  template:
+    src: redis.conf.j2
+    dest: "{{ redis_conf_file_location }}/redis.conf"
+    owner: redis
+    group: redis
+  become: yes
+  notify:
+    - Ensure redis service is running

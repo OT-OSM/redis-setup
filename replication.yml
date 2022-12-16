@@ -1,0 +1,12 @@
+---
+- hosts: redis
+  roles:
+    - { role: redis, tags: ["preinstall", "redis"] }
+
+- hosts: redis_cluster
+  roles:
+    - { role: redis-cluster, tags: ["install", "redis-cluster"] }
+
+- hosts: sentinel
+  roles:
+    - { role: sentinel, tags: ["install", "sentinel"] }

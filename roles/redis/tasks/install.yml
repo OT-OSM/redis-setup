@@ -1,0 +1,60 @@
+---
+- name: Ensure if redis is previously installed or not
+  stat:
+    path: "/usr/local/bin/redis-server"
+  register: redis_status
+
+- name: Ensure that the defined redis version is downloaded {{ redis_version }}
+  unarchive:
+    src: "http://download.redis.io/releases/redis-{{ redis_version }}.tar.gz"
+    dest: /tmp/
+    remote_src: yes
+  when: >
+    not redis_status.stat.exists or
+    upgrade_redis
+
+- name: Ensure the build time dependencies are met
+  make:
+    chdir: "/tmp/redis-{{ redis_version }}"
+  when: >
+    not redis_status.stat.exists or
+    upgrade_redis
+  become: yes
+
+- name: Ensuring redis server is installed on the system
+  make:
+    chdir: "/tmp/redis-{{ redis_version }}"
+    target: install
+  when: >
+    not redis_status.stat.exists or
+    upgrade_redis
+  become: yes
+
+- name: Ensure the tarballs and build directory is cleaned up
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "/tmp/redis-{{ redis_version }}.tar.gz"
+    - "/tmp/redis-{{ redis_version }}"
+  when: >
+    not redis_status.stat.exists or
+    upgrade_redis
+  become: yes
+
+- name: Ensuring that redis group exists in system
+  group:
+    name: "redis"
+    state: present
+  become: yes
+
+- name: Ensuring that redis user exists in system
+  user:
+    name: "redis"
+    group: "redis"
+    shell: /sbin/nologin
+    password: "!!"
+    createhome: no
+    system: yes
+    state: present
+  become: yes

@@ -1,0 +1,12 @@
+---
+- name: Ensure system daemon reloaded
+  systemd:
+    daemon_reload: yes
+  become: yes
+
+- name: Ensure redis service is running
+  systemd:
+    name: redis.service
+    enabled: yes
+    state: restarted
+  become: yes

@@ -1,0 +1,6 @@
+---
+redis_conf_file_location: "/etc/redis/cluster/follower"
+redis_logfile: "/var/log/redis/follower/redis.log"
+redis_data_dir: "/var/lib/redis/follower"
+redis_log_dir: "/var/log/redis/follower"
+redis_cluster_config_file: "/etc/redis/cluster/follower/nodes.conf"

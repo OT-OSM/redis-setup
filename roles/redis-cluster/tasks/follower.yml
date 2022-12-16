@@ -1,0 +1,61 @@
+---
+- name: Including variables for the Redis Follower
+  include_vars: follower.yml
+
+- name: Ensure the configuration directories are present for Follower
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+    owner: redis
+    group: redis
+  with_items:
+    - "{{ redis_log_dir }}"
+    - "{{ redis_data_dir }}"
+    - "{{ redis_conf_file_location }}"
+  become: yes
+
+- name: Ensure that redis service exists on the system (Follower)
+  template:
+    src: redis.service.j2
+    dest: "/etc/systemd/system/redis-follower.service"
+    owner: root
+    group: root
+  become: yes
+  notify:
+    - Ensure system daemon reloaded
+
+- name: Ensure the redis sharded configuration is updated (Follower)
+  template:
+    src: redis.conf.j2
+    dest: "{{ redis_conf_file_location }}/redis.conf"
+    owner: redis
+    group: redis
+  become: yes
+  notify:
+    - Ensure redis follower service is running
+  when: >
+    setup_mode == "sharded" and
+    groups['follower'] | length > 1
+
+- name: Ensuring the slaveof variables is set for Followers
+  set_fact:
+    redis_slaveof:  "{{ hostvars[groups['leader'][0]]['ansible_default_ipv4']['address'] }} {{ hostvars[groups['leader'][0]]['redis_port'] }}"
+  when: >
+    groups['follower']
+
+- name: Ensure the redis replicated configuration is updated (Follower)
+  template:
+    src: redis.replicated.conf.j2
+    dest: "{{ redis_conf_file_location }}/redis.conf"
+    owner: redis
+    group: redis
+  become: yes
+  notify:
+    - Ensure redis follower service is running
+  when: >
+    setup_mode == "replicated" and
+    groups['leader'] | length == 1
+
+- name: Ensuring that handlers are executed for follower
+  meta: flush_handlers

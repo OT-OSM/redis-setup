@@ -1,0 +1,5 @@
+---
+- name: Ensuring redis sentinel setup and configuration
+  include: config.yml
+  when: >
+    groups['leader'] | length == 1
