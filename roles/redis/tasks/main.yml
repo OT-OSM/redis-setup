@@ -11,3 +11,8 @@
 - name: Ensuring redis configuration is up to date
   include_tasks: configure.yml
   when: groups['redis_cluster'] is not defined
+
+- name: Ensure redis monitoring is installed and configured
+  include_tasks: monitoring.yml
+  when: >
+    redis_monitoring_enabled

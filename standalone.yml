@@ -1,4 +1,6 @@
 ---
 - hosts: redis
+  vars:
+    redis_monitoring_enabled: true
   roles:
     - { role: redis, tags: ["preinstall", "redis"] }

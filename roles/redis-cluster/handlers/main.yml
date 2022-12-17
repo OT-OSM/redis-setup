@@ -17,3 +17,17 @@
     enabled: yes
     state: restarted
   become: yes
+
+- name: Ensure redis leader exporter service is running
+  systemd:
+    name: redis-leader-exporter.service
+    enabled: yes
+    state: restarted
+  become: yes
+
+- name: Ensure redis follower exporter service is running
+  systemd:
+    name: redis-follower-exporter.service
+    enabled: yes
+    state: restarted
+  become: yes
