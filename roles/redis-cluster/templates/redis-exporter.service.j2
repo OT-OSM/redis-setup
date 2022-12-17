@@ -6,7 +6,7 @@ After=network.target
 {% if redis_password is defined %}
 Environment=REDIS_PASSWORD={{ redis_password }}
 {% endif %}
-ExecStart=/usr/local/bin/redis_exporter --redis.addr {{ ansible_ssh_host }} --web.listen-address 0.0.0.0:{{ exporter_port }}
+ExecStart=/usr/local/bin/redis_exporter --redis.addr redis://{{ ansible_ssh_host }}:{{ redis_port }} --web.listen-address 0.0.0.0:{{ exporter_port }}
 ExecStop=/bin/kill -s TERM $MAINPID
 Type=simple
 User=redis
