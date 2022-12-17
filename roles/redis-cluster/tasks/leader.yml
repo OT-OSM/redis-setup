@@ -62,7 +62,7 @@
     - Ensure system daemon reloaded
     - Ensure redis exporter service is running
   when: >
-    inventory_hostname in groups['leader]' and
+    inventory_hostname in groups['leader'] and
     redis_monitoring_enabled
 
 - name: Ensuring that handlers are executed for leader
