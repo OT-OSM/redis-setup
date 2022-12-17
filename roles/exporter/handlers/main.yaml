@@ -1,0 +1,12 @@
+---
+- name: Ensure system daemon reloaded
+  systemd:
+    daemon_reload: yes
+  become: yes
+
+- name: Ensure exporter service is running
+  systemd:
+    name: redis-exporter.service
+    enabled: yes
+    state: restarted
+  become: yes

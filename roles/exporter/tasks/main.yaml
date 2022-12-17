@@ -1,0 +1,6 @@
+---
+- name: Ensuring redis exporter setup and configuration
+  include: config.yml
+  # Make change in the when
+  when: >
+    groups['leader'] | length == 1

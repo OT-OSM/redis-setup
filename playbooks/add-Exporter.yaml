@@ -1,0 +1,4 @@
+- hosts: redis_exporter
+  vars: 
+  tasks:
+    - name: 

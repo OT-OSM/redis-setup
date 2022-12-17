@@ -1,0 +1,33 @@
+---
+- name: Ensure that exporter service exists on the system
+  template:
+    src: redis-exporter.service.j2
+    dest: "/etc/systemd/system/redis-exporter.service"
+    owner: root
+    group: root
+  become: yes
+  notify:
+    - Ensure system daemon reloaded
+
+# - name: Ensure the exporter configuration is updated
+#   template:
+#     src: exporter.conf.j2
+#     dest: "{{ redis_conf_file_location }}/exporter.conf"
+#     owner: redis
+#     group: redis
+#   become: yes
+#   notify:
+#     - Ensure exporter service is running
+
+- name : Copy the Password file
+  template : 
+    src : redis-password.json.j2
+    dest : /opt 
+    owner : root 
+    group : root 
+  become: yes
+  notify:  
+    - Ensure exporter service is running
+
+- name: Ensuring that handlers are executed for exporter
+  meta: flush_handlers

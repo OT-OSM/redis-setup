@@ -1,0 +1,3 @@
+---
+redis_password: "Opstree@1234"
+exporter_port : 9121  
