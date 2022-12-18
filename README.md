@@ -24,3 +24,12 @@ Along with these features, the redis ansible automation supports the on-fly scal
 - RedHat and Centos 8
 
 ## Important Role Variables
+
+| **Variable Name**        | **Default Value** | **Description**                                                           |
+|--------------------------|-------------------|---------------------------------------------------------------------------|
+| redis_password           | Opstree@1234      | The redis password for authentication purpose                             |
+| redis_monitoring_enabled | true              | To enable redis monitoring with the redis-exporter                        |
+| setup_mode               | sharded           | Setup mode for redis cluster, possible values - `replicated` or `sharded` |
+| leader_redis_port        | 6379              | The listen port of redis leader to listen traffic                         |
+| follower_redis_port      | 6380              | The listen port of redis follower to listen traffic                       |
+| redis_sentinel_port      | 23679             | The redis sentinel port to listen traffic                                 |
