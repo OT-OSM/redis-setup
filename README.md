@@ -49,3 +49,18 @@ The defined variables in the table are not only variables in the automation. The
 | 6379     | Redis standalone and leader port |
 | 6380     | Redis follower port              |
 | 26379    | Redis sentinel port              |
+
+#### Directories and Files
+
+| **Directory and Files**                  | **Description**                                             |
+|------------------------------------------|-------------------------------------------------------------|
+| `/etc/redis/redis.conf`                  | Redis standalone configuration file                         |
+| `/opt/redis/data`                        | Data directory for storing rdb files for redis standalone   |
+| `/var/log/redis/redis.log`               | Log file where redis standalone service logs will be stored |
+| `/etc/redis/cluster/leader/redis.conf`   | Redis leader configuration file                             |
+| `/var/log/redis/leader/redis.log`        | Log file for redis leader service logs                      |
+| `/var/lib/redis/leader`                  | Data directory for storing rdb files for redis leader       |
+| `/etc/redis/cluster/follower/redis.conf` | Redis follower configuration file                           |
+| `/var/log/redis/follower/redis.log`      | Log file for redis follower service logs                    |
+| `/var/lib/redis/follower`                | Data directory for storing rdb files for redis follower     |
+
