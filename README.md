@@ -2,6 +2,15 @@
 
 OSM Redis Setup is a bundle of roles, playbooks, and inventories to set up different modes of redis like- standalone, sharded cluster, and replicated cluster, along with sentinel to handle fail-over. This ansible automation doesn't restrict to setting up any environment once, but also it can be used for change management, upgrading, and scaling the environment.
 
+## Documentation
+
+- [Redis standalone](docs/01_standalone.md)
+- [Redis sharded cluster](docs/02_sharded-cluster.md)
+  - [Adding node](docs/03_adding-node.md)
+  - [Removing node](docs/04_removing-node.md)
+- [Redis replication cluster](docs/05_replicated-cluster.md)
+  - [Sentinel integration](docs/06_sentinel-integration.md)
+
 ## Supported Features
 
 Here the features which are supported by this automation:
@@ -76,3 +85,6 @@ The defined variables in the table are not only variables in the automation. The
 | redis-leader-exporter.service   | Redis exporter leader systemd service     |
 | redis-follower-exporter.service | Redis exporter follower systemd service   |
 
+## Contact Information
+
+This project is managed by [OpsTree Solutions](http://opstree.com). If you have any queries or suggestions, mail us at [opensource@opstree.com](mailto:opensource@opstree.com).
