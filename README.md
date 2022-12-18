@@ -50,7 +50,7 @@ The defined variables in the table are not only variables in the automation. The
 | 6380     | Redis follower port              |
 | 26379    | Redis sentinel port              |
 
-#### Directories and Files
+#### Directories and files
 
 | **Directory and Files**                  | **Description**                                             |
 |------------------------------------------|-------------------------------------------------------------|
@@ -63,4 +63,16 @@ The defined variables in the table are not only variables in the automation. The
 | `/etc/redis/cluster/follower/redis.conf` | Redis follower configuration file                           |
 | `/var/log/redis/follower/redis.log`      | Log file for redis follower service logs                    |
 | `/var/lib/redis/follower`                | Data directory for storing rdb files for redis follower     |
+
+#### Systemd services
+
+| **Service Name**                | **Description**                           |
+|---------------------------------|-------------------------------------------|
+| redis.service                   | Redis standalone systemd service          |
+| redis-exporter.service          | Redis exporter standalone systemd service |
+| redis-leader.service            | Redis leader systemd service              |
+| redis-follower.service          | Redis follower systemd service            |
+| redis-sentinel.service          | Redis sentinel systemd service            |
+| redis-leader-exporter.service   | Redis exporter leader systemd service     |
+| redis-follower-exporter.service | Redis exporter follower systemd service   |
 
