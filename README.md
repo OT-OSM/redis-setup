@@ -42,3 +42,10 @@ The defined variables in the table are not only variables in the automation. The
 
 ### Default Properties
 
+#### Ports
+
+| **Port** | **Description**                  |
+|----------|----------------------------------|
+| 6379     | Redis standalone and leader port |
+| 6380     | Redis follower port              |
+| 26379    | Redis sentinel port              |
