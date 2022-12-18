@@ -22,6 +22,10 @@ A sample playbook for standalone setup can be referred like this:
     - { role: redis, tags: ["preinstall", "redis"] }
 ```
 
+```shell
+ansible-playbook -i inventory/standalone.ini standalone.yml
+```
+
 By default, the redis monitoring is enabled and if your setup doesn't require the redis exporter as part of monitoring setup. Disable the setup from [vars/main.yml](../roles/redis/vars/main.yml) or command line option.
 
 ```shell
