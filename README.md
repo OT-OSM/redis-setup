@@ -4,7 +4,7 @@ OSM Redis Setup is a bundle of roles, playbooks, and inventories to set up diffe
 
 ## Supported Features
 
-Here the features which are supported by this automation:-
+Here the features which are supported by this automation:
 
 - [Redis standalone setup](https://redis.io/docs/getting-started/)
 - [Redis sharded cluster setup](https://redis.io/docs/management/scaling/)
@@ -33,3 +33,12 @@ Along with these features, the redis ansible automation supports the on-fly scal
 | leader_redis_port        | 6379              | The listen port of redis leader to listen traffic                         |
 | follower_redis_port      | 6380              | The listen port of redis follower to listen traffic                       |
 | redis_sentinel_port      | 23679             | The redis sentinel port to listen traffic                                 |
+
+The defined variables in the table are not only variables in the automation. There are other optional environment variables that can be configured or changed as per the user's requirement. The other environment variables are:
+
+- [Redis Variables](roles/redis/defaults)
+- [Redis Cluster Variables](roles/redis-cluster/defaults)
+- [Redis Sentinel Variables](roles/sentinel/defaults)
+
+### Default Properties
+
