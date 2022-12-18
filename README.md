@@ -14,3 +14,13 @@ Here the features which are supported by this automation:-
 
 Along with these features, the redis ansible automation supports the on-fly scaling and de-scaling of redis cluster with automatic re-sharding.
 
+## Supported Platforms
+
+- Debian 10.X
+- Ubuntu 18.04
+- Ubuntu 20.04
+- Ubuntu 22.04
+- RedHat and Centos 7
+- RedHat and Centos 8
+
+## Important Role Variables
