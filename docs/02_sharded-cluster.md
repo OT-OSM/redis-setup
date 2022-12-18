@@ -52,3 +52,5 @@ By default, the redis monitoring is enabled and if your setup doesn't require th
 ansible-playbook -i inventory/cluster.ini cluster.yml \
   -e redis_monitoring_enabled=false -e redis_password="StrongPassword"
 ```
+
+## Adding node in cluster
