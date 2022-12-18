@@ -54,3 +54,43 @@ ansible-playbook -i inventory/cluster.ini cluster.yml \
 ```
 
 ## Adding node in cluster
+
+This ansible automation is capable of adding nodes in the redis sharded cluster along with re-sharding. But instead of running the cluster.yml, we have to execute [add-node.yml](../playbooks/add-node.yml) to add nodes in the cluster.
+
+We just need to add the nodes in the inventory like this:
+
+```ini
+[redis]
+# Old redis nodes
+redis1 ansible_ssh_host=172.31.57.91
+redis2 ansible_ssh_host=172.31.49.187
+redis3 ansible_ssh_host=172.31.62.128
+# New nodes on which redis needs to be installed
+redis4 ansible_ssh_host=172.31.53.190
+
+[redis_cluster:children]
+leader
+follower
+
+[leader]
+# Old cluster nodes
+redis-leader1 ansible_ssh_host=172.31.57.91 redis_port=6379 exporter_port=9121 leader_id=0 node_status=ready
+redis-leader2 ansible_ssh_host=172.31.49.187 redis_port=6379 exporter_port=9121 leader_id=1 node_status=ready
+redis-leader3 ansible_ssh_host=172.31.62.128 redis_port=6379 exporter_port=9121 leader_id=2 node_status=ready
+# New node that need to be added in cluster as leader
+redis-leader4 ansible_ssh_host=172.31.53.190 redis_port=6379 exporter_port=9121 leader_id=2 node_status=ready
+
+[follower]
+# Old cluster nodes
+redis-follower1 ansible_ssh_host=172.31.57.91 redis_port=6380 exporter_port=9122 leader_id=0 node_status=ready
+redis-follower2 ansible_ssh_host=172.31.49.187 redis_port=6380 exporter_port=9122 leader_id=1 node_status=ready
+redis-follower3 ansible_ssh_host=172.31.62.128 redis_port=6380 exporter_port=9122 leader_id=2 node_status=ready
+# New node that need to be added in cluster as follower
+redis-follower4 ansible_ssh_host=172.31.53.190 redis_port=6379 exporter_port=9121 leader_id=2 node_status=ready
+```
+
+Once the inventory is prepared, we can execute the playbook like this:
+
+```shell
+ansible-playbook -i inventory/cluster.ini playbooks/add-node.yml
+```

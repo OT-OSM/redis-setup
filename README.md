@@ -6,7 +6,7 @@ OSM Redis Setup is a bundle of roles, playbooks, and inventories to set up diffe
 
 - [Redis standalone](docs/01_standalone.md)
 - [Redis sharded cluster](docs/02_sharded-cluster.md)
-  - [Adding node](docs/03_adding-node.md)
+  - [Adding node](docs/02_sharded-cluster.md#adding-node-in-cluster)
   - [Removing node](docs/04_removing-node.md)
 - [Redis replication cluster](docs/05_replicated-cluster.md)
   - [Sentinel integration](docs/06_sentinel-integration.md)
