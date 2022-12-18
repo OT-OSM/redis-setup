@@ -21,8 +21,8 @@
 
 - name : Copy the Password file
   template : 
-    src : redis_password.json.j2
-    dest : /opt 
+    src : password.json.j2
+    dest : "/opt/password.json"
     owner : root 
     group : root 
   become: yes

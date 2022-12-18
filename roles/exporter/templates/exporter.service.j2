@@ -8,7 +8,7 @@ Restart=on-failure
 
 #Change this line if you download the 
 #Prometheus on different path user
-ExecStart=/usr/local/bin/redis_exporter --redis.password-file=/opt/redis-password.json
+ExecStart=/usr/local/bin/redis_exporter redis.password-file=/opt/password.json
 
 [Install]
 WantedBy=multi-user.target
