@@ -1,22 +1,22 @@
 ---
 - name: Ensure if exporter is previously installed or not
   stat:
-    path: "/usr/local/bin/redis_exporter"
+    path: "/usr/local/bin/exporter"
   register: exporter_status
 
 - name: Ensure that the defined exporter version is downloaded  # {{ redis_version }}
   unarchive:
-    src: https://github.com/oliver006/redis_exporter/releases/download/v1.45.0/redis_exporter-v1.45.0.linux-amd64.tar.gz
+    src: https://github.com/oliver006/exporter/releases/download/v1.45.0/exporter-v1.45.0.linux-amd64.tar.gz
     dest: /tmp/
     remote_src: yes
   when: >
-    not exporter_status.stat.exists or
-    upgrade_redis
+    not exporter_status.stat.exists 
 
 - name: Copy file with owner and permissions
   copy:
-    src: /tmp/redis_exporter-v1.45.0.linux-amd64/redis_exporter
+    src: /tmp/exporter-v1.45.0.linux-amd64/exporter
     dest: /usr/local/bin/
-    # owner: foo
-    # group: foo
+    remote_src: yes
+    owner: root
+    group: root
     # mode: '0644'

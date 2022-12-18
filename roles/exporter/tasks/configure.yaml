@@ -1,8 +1,8 @@
 ---
 - name: Ensure that exporter service exists on the system
   template:
-    src: redis-exporter.service.j2
-    dest: "/etc/systemd/system/redis-exporter.service"
+    src: exporter.service.j2
+    dest: "/etc/systemd/system/exporter.service"
     owner: root
     group: root
   become: yes
@@ -21,7 +21,7 @@
 
 - name : Copy the Password file
   template : 
-    src : redis-password.json.j2
+    src : redis_password.json.j2
     dest : /opt 
     owner : root 
     group : root 

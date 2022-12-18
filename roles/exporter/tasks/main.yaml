@@ -1,6 +1,9 @@
 ---
+- name: Install Redis exporter
+  include_tasks : install.yaml
+  
 - name: Ensuring redis exporter setup and configuration
-  include: config.yml
+  include_tasks: configure.yaml
   # Make change in the when
-  when: >
-    groups['leader'] | length == 1
+  # when: >
+  #   groups['leader'] | length == 1

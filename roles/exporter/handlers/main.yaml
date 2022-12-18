@@ -6,7 +6,7 @@
 
 - name: Ensure exporter service is running
   systemd:
-    name: redis-exporter.service
+    name: exporter.service
     enabled: yes
     state: restarted
   become: yes
