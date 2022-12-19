@@ -43,14 +43,14 @@ A sample playbook for sharded cluster setup is described as:
 ```
 
 ```shell
-ansible-playbook -i inventory/cluster.ini cluster.yml
+ansible-playbook -i inventory/cluster.ini cluster.yml -e setup_mode=sharded
 ```
 
 By default, the redis monitoring is enabled and if your setup doesn't require the redis exporter as part of monitoring setup. Disable the setup from [defaults/main.yml](../roles/redis-cluster/defaults/main.yml) or using command line option.
 
 ```shell
 ansible-playbook -i inventory/cluster.ini cluster.yml \
-  -e redis_monitoring_enabled=false -e redis_password="StrongPassword"
+  -e redis_monitoring_enabled=false -e redis_password="StrongPassword" -e setup_mode=sharded
 ```
 
 ## Adding node in cluster
@@ -128,6 +128,8 @@ redis-follower3 ansible_ssh_host=172.31.62.128 redis_port=6380 exporter_port=912
 # Redis node that needs to be removed
 redis-follower4 ansible_ssh_host=172.31.53.190 redis_port=6379 exporter_port=9121 leader_id=2 node_status=remove
 ```
+
+**Note: Make sure at a time, we remove only one node. This rule need to be followed strictly.**
 
 Once the inventory changes are done, we need to execute the ansible playbook:
 
