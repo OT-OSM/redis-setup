@@ -1,4 +1,0 @@
-- hosts: exporter
-  vars: 
-  tasks:
-    - name: 
