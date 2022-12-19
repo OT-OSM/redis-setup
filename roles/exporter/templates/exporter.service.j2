@@ -6,9 +6,15 @@ After=network-online.target
 User=root
 Restart=on-failure
 
-#Change this line if you download the 
-#Prometheus on different path user
-ExecStart=/usr/local/bin/redis_exporter redis.password-file=/opt/password.json
+ExecStart=/usr/local/bin/redis_exporter redis.password-file=/opt/password.json --redis.addr redis://{{ ansible_ssh_host }}:{{ redis_port }} --web.listen-address 0.0.0.0:{{ exporter_port }}
+ExecStop=/bin/kill -s TERM $MAINPID
+
+Type=simple
+User=redis
+Group=redis
+RuntimeDirectory={{ redis_runtime_directory }}
+RuntimeDirectoryMode=0755
+LimitNOFILE=65535
 
 [Install]
 WantedBy=multi-user.target
