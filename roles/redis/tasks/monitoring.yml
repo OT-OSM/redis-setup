@@ -1,0 +1,50 @@
+---
+- name: Ensure if redis exporter is previously installed or not
+  stat:
+    path: "/usr/local/bin/redis_exporter"
+  register: redis_exporter_status
+
+- name: Ensure that redis exporter download URL is defined
+  set_fact:
+    redis_exporter_url: https://github.com/oliver006/redis_exporter/releases/download
+
+- name: Ensure that redis exporter package is downloaded and unarchived
+  unarchive:
+    src: "{{ redis_exporter_url }}/{{ exporter_version }}/redis_exporter-{{ exporter_version }}.linux-amd64.tar.gz"
+    dest: /tmp
+    remote_src: yes
+  when: >
+    not redis_exporter_status.stat.exists
+
+- name: Ensuring that redis exporter binary is placed on right location
+  copy:
+    src: /tmp/redis_exporter-{{ exporter_version }}.linux-amd64/redis_exporter
+    dest: /usr/local/bin/redis_exporter
+    remote_src: yes
+    mode: 0555
+  when: >
+    not redis_exporter_status.stat.exists
+  become: yes
+
+- name: Ensure the redis exporter tarball is cleaned up
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "/tmp/redis_exporter-{{ exporter_version }}.linux-amd64.tar.gz"
+    - "/tmp/redis_exporter-{{ exporter_version }}.linux-amd64"
+  when: >
+    not redis_exporter_status.stat.exists
+  become: yes
+
+- name: Ensure that redis exporter service exists on the system
+  template:
+    src: redis-exporter.service.j2
+    dest: "/etc/systemd/system/redis-exporter.service"
+    owner: root
+    group: root
+  become: yes
+  notify:
+    - Ensure system daemon reloaded
+    - Ensure redis exporter service is running
+  when: groups['redis_cluster'] is not defined

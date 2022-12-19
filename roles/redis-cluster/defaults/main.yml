@@ -74,3 +74,5 @@ redis_repl_backlog_size: false
 redis_min_slaves_to_write: 0
 redis_min_slaves_max_lag: 10
 redis_slaveof: false
+
+redis_monitoring_enabled: true
