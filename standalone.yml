@@ -3,6 +3,6 @@
   roles:
     - { role: redis, tags: ["preinstall", "redis"] }
 
-- hosts: exporter
-  roles:
-    - { role : exporter}
+# - hosts: exporter
+#   roles:
+#     - { role : exporter}

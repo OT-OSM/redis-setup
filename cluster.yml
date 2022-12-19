@@ -6,3 +6,7 @@
 - hosts: redis_cluster
   roles:
     - { role: redis-cluster, tags: ["install", "redis-cluster"] }
+
+# - hosts: exporter
+#   roles:
+#     - { role : exporter}

@@ -10,3 +10,7 @@
 - hosts: sentinel
   roles:
     - { role: sentinel, tags: ["install", "sentinel"] }
+
+# - hosts: exporter
+#   roles:
+#     - { role : exporter}
