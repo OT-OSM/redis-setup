@@ -4,6 +4,7 @@
     redis_password: Opstree@1234
     leader_redis_port: 6379
     follower_redis_port: 6380
+    number_of_slots : 100
   tasks:
     - name: Ensuring the temporary file is created before execution
       local_action:
@@ -33,6 +34,34 @@
         dest: /tmp/node-removal
       when: >
         node_status == 'remove'
+    
+    # - name: Check the Node id of dicarding node
+    #   command: |-
+    #     redis-cli -h  {{remove_node_ip}}  -p {{remove_node_port}} -a {{redis_password}} cluster myid
+    #   register: remove_node_id
+    #   when: >
+    #      not remove_node_id.stat.exists and  node_status == "remove" 
+
+    - name: Check the Node id of transfer node
+      command: |-
+        redis-cli -h  {{transfer_node_ip}}  -p {{transfer_node_port}} -a {{redis_password}} cluster myid
+      register: transfer_node_id
+      when: >
+        not transfer_node_id.stat.exists and node_status == "ready"       
+    
+    - name:  Reshard the Node to be removed 
+      command: |-
+        {{ redis_command }} --cluster reshard {{ansible_ssh_host}}:{{redis_port}} 
+        --cluster-from {{item.split(' ')[0]}} --cluster-to {{transfer_node_id}} 
+        --cluster-slots {{ expr $(item.split(" ")[-1]) - $(item.split(" ")[-2])}} --cluster-yes
+      when: node_status == 'remove'
+      with_items: 
+        - "{{ lookup('file', '/tmp/node-removal') }}"
+
+    - name: Rebalance the Redis cluster
+      command: |- 
+        redis-cli -h  {{ansible_ssh_host}}  -p {{redis_port}} -a {{redis_password}}  --cluster rebalance {{ansible_ssh_host}}:{{redis_port}}
+      when: node_status == "ready"
 
     - name: Ensuring the removed marked nodes are not part of the cluster
       command: |-
