@@ -4,7 +4,6 @@
     redis_password: Opstree@1234
     leader_redis_port: 6379
     follower_redis_port: 6380
-    number_of_slots : 100
   tasks:
     - name: Ensuring the temporary file is created before execution
       local_action:
