@@ -52,7 +52,7 @@
       command: |-
         {{ redis_command }} --cluster reshard {{ansible_ssh_host}}:{{redis_port}} 
         --cluster-from {{item.split(' ')[0]}} --cluster-to {{transfer_node_id}} 
-        --cluster-slots {{ expr $(item.split(" ")[-1]) - $(item.split(" ")[-2])}} --cluster-yes
+        --cluster-slots {{ expr $(item.split(" ")[-1]) - $(item.split(" ")[-2]) + 1}} --cluster-yes
       when: node_status == 'remove'
       with_items: 
         - "{{ lookup('file', '/tmp/node-removal') }}"
