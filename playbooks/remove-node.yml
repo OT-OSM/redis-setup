@@ -46,14 +46,14 @@
         redis-cli -h  {{ansible_ssh_host}}  -p {{redis_port}} -a {{redis_password}} cluster myid
       register: transfer_node_id
       when: >
-        node_status == "ready"       
+        node_status == "ready"    
     
     - name:  Reshard the Node to be removed 
-      command: |-
+      shell : |-
         {{ redis_command }} --cluster reshard {{ansible_ssh_host}}:{{redis_port}} 
         --cluster-from {{item.split(' ')[0]}} 
         --cluster-to {{transfer_node_id}} 
-        --cluster-slots  "({{item.split(" ")[-1]}} - {{item.split(" ")[-2]}} + 1)"
+        --cluster-slots  {{ redis_slots }}
         --cluster-yes
       when: node_status == 'remove'
       with_items: 
