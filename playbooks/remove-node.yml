@@ -43,7 +43,7 @@
 
     - name: Check the Node id of transfer node
       command: |-
-        redis-cli -h  {{transfer_node_ip}}  -p {{transfer_node_port}} -a {{redis_password}} cluster myid
+        redis-cli -h  {{ansible_ssh_host}}  -p {{redis_port}} -a {{redis_password}} cluster myid
       register: transfer_node_id
       when: >
         not transfer_node_id.stat.exists and node_status == "ready"       
