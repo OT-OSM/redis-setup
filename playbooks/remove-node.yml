@@ -11,6 +11,13 @@
         path: /tmp/node-removal
         state: touch
 
+    - name: Ensuring the temporary file is created before execution
+      local_action:
+        module: file
+        path: /tmp/node-ready
+        state: touch
+    
+
     - name: Ensure redis-cli is generated without password
       set_fact:
         redis_command: redis-cli
@@ -43,10 +50,10 @@
 
     - name: Check the Node id of transfer node
       shell : |-
-        redis-cli -h  {{ansible_ssh_host}}  -p {{redis_port}} -a {{redis_password}} cluster nodes | grep master | grep -v {{ansible_ssh_host}}:{{redis_port}}
+        redis-cli -h  {{ansible_ssh_host}}  -p {{redis_port}} -a {{redis_password}} cluster myid
       register: transfer_node_id
-      when: >
-        node_status == "remove"    
+      when: > 
+        node_status == "ready" and inventory_hostname in groups['leader'] 
 
     - name: Ensure the transfer node are present in temporary file
       local_action:
@@ -54,7 +61,7 @@
         content: "{{ transfer_node_id.stdout_lines }}"
         dest: /tmp/node-ready
       when: >
-        node_status == 'ready'
+        node_status == 'ready' and inventory_hostname in groups['leader'] 
 
     - name:  Reshard the Node to be removed 
       command : |-
@@ -63,7 +70,8 @@
         --cluster-to {{item.ready.split(' ')[0]}} 
         --cluster-slots  {{ redis_slots }}
         --cluster-yes
-      when: node_status == 'remove'
+      when: >
+        node_status == 'remove' and inventory_hostname in groups['leader']
       with_items: 
         - "{{ remove : lookup('file', '/tmp/node-removal') , ready : lookup('file', '/tmp/node-ready') }}"
 
