@@ -17,7 +17,6 @@
         path: /tmp/node-ready
         state: touch
     
-
     - name: Ensure redis-cli is generated without password
       set_fact:
         redis_command: redis-cli
@@ -67,7 +66,7 @@
       command : |-
         {{ redis_command }} --cluster reshard {{ansible_ssh_host}}:{{redis_port}} 
         --cluster-from {{item.remove.split(' ')[0]}} 
-        --cluster-to {{item.ready.split(' ')[0]}} 
+        --cluster-to {{item.ready}} 
         --cluster-slots  {{ redis_slots }}
         --cluster-yes
       when: >
@@ -78,7 +77,7 @@
     - name: Rebalance the Redis cluster
       command: |- 
         redis-cli -h  {{ansible_ssh_host}}  -p {{redis_port}} -a {{redis_password}}  --cluster rebalance {{ansible_ssh_host}}:{{redis_port}}
-      when: node_status == "ready"
+      when: node_status == "ready" and inventory_hostname in groups['leader']
 
     - name: Ensuring the removed marked nodes are not part of the cluster
       command: |-
