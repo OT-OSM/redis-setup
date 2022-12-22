@@ -72,7 +72,7 @@
       when: >
         node_status == 'remove' and inventory_hostname in groups['leader']
       with_items: 
-        - "{{ remove : lookup('file', '/tmp/node-removal') , ready : lookup('file', '/tmp/node-ready') }}"
+        - { remove : "{{lookup('file', '/tmp/node-removal' , wantlist=False)}}" , ready : "{{lookup('file', '/tmp/node-ready', wantlist=False)}}" }
 
     - name: Rebalance the Redis cluster
       command: |- 
