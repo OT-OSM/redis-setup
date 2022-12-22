@@ -38,14 +38,7 @@
         content: "{{ command_result.stdout_lines | select('search', ansible_ssh_host + ':' + redis_port|string) }}"
         dest: /tmp/node-removal
       when: >
-        node_status == 'remove'
-    
-    # - name: Check the Node id of dicarding node
-    #   command: |-
-    #     redis-cli -h  {{remove_node_ip}}  -p {{remove_node_port}} -a {{redis_password}} cluster myid
-    #   register: remove_node_id
-    #   when: >
-    #      not remove_node_id.stat.exists and  node_status == "remove" 
+        node_status == 'remove' 
 
     - name: Check the Node id of transfer node
       shell : |-
@@ -61,18 +54,23 @@
         dest: /tmp/node-ready
       when: >
         node_status == 'ready' and inventory_hostname in groups['leader'] 
-
+        
+    - name: Set the transfer node id in a variable 
+      ansible.builtin.set_fact:
+        remove_node_temp : " {{ lookup('file', '/tmp/node-ready' , wantlist=True)[0] }}"
+      when: node_status == remove
+        
     - name:  Reshard the Node to be removed 
       command : |-
         {{ redis_command }} --cluster reshard {{ansible_ssh_host}}:{{redis_port}} 
         --cluster-from {{item.remove.split(' ')[0]}} 
-        --cluster-to {{item.ready[0]}} 
+        --cluster-to {{ remove_node_temp }} 
         --cluster-slots  {{ redis_slots }}
         --cluster-yes
       when: >
         node_status == 'remove' and inventory_hostname in groups['leader']
       with_items: 
-        - { remove : "{{lookup('file', '/tmp/node-removal' , wantlist=True)}}" , ready : "{{lookup('file', '/tmp/node-ready', wantlist=True)}}" }
+        - "{{ lookup('file', '/tmp/node-removal' )}}"
 
 
     - name: Ensuring the removed marked nodes are not part of the cluster
