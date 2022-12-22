@@ -72,12 +72,8 @@
       when: >
         node_status == 'remove' and inventory_hostname in groups['leader']
       with_items: 
-        - { remove : "{{lookup('file', '/tmp/node-removal' , wantlist=False)}}" , ready : "{{lookup('file', '/tmp/node-ready', wantlist=False)}}" }
+        - { remove : "{{lookup('file', '/tmp/node-removal' , wantlist=True)}}" , ready : "{{lookup('file', '/tmp/node-ready', wantlist=True)}}" }
 
-    - name: Rebalance the Redis cluster
-      command: |- 
-        redis-cli -h  {{ansible_ssh_host}}  -p {{redis_port}} -a {{redis_password}}  --cluster rebalance {{ansible_ssh_host}}:{{redis_port}}
-      when: node_status == "ready" and inventory_hostname in groups['leader']
 
     - name: Ensuring the removed marked nodes are not part of the cluster
       command: |-
@@ -88,6 +84,11 @@
       when: >
         inventory_hostname in groups['leader'][0] and
         lookup('file', '/tmp/node-removal')|length > 0
+
+    - name: Rebalance the Redis cluster
+      command: |- 
+        redis-cli -h  {{ansible_ssh_host}}  -p {{redis_port}} -a {{redis_password}}  --cluster rebalance {{ansible_ssh_host}}:{{redis_port}}
+      when: node_status == "ready" and inventory_hostname in groups['leader']
 
     - name: Ensuring the temporary file is removed after execution
       local_action:
