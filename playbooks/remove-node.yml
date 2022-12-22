@@ -66,7 +66,7 @@
       command : |-
         {{ redis_command }} --cluster reshard {{ansible_ssh_host}}:{{redis_port}} 
         --cluster-from {{item.remove.split(' ')[0]}} 
-        --cluster-to {{item.ready}} 
+        --cluster-to {{item.ready[0]}} 
         --cluster-slots  {{ redis_slots }}
         --cluster-yes
       when: >
