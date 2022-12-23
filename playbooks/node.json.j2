@@ -1,5 +1,5 @@
 {
-    "removenode" : "{{ remove_node_id.stdout }}",
-    "presentnode" : "{{ transfer_node_id.stdout }}"
+    "removenode" :  {{ (lookup('file', '/tmp/node-removal')) }} ,
+    "presentnode" : {{ (lookup('file', '/tmp/node-ready')) }}
 }
 
