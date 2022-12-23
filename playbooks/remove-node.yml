@@ -5,12 +5,12 @@
     leader_redis_port: 6379
     follower_redis_port: 6380
   tasks:
-    - name: Ensuring the temporary file is created before execution
-      local_action:
-        module: file
-        path: /tmp/node-removal
-        state: touch
-
+    # - name: Ensuring the temporary file is created before execution
+    #   local_action:
+    #     module: file
+    #     path: /tmp/node-removal
+    #     state: touch
+    
     - name: Ensure redis-cli is generated without password
       set_fact:
         redis_command: redis-cli
@@ -26,13 +26,37 @@
         {{ redis_command }} cluster nodes
       register: command_result
 
-    - name: Ensure the nodes need to removed are present in temporary file
-      local_action:
-        module: copy
-        content: "{{ command_result.stdout_lines | select('search', ansible_ssh_host + ':' + redis_port|string) }}"
-        dest: /tmp/node-removal
+    - name: Check the Node id of transfer node
+      shell : |-
+        redis-cli -h  {{ansible_ssh_host}}  -p {{redis_port}} -a {{redis_password}} cluster myid
+      register: transfer_node_id
+      when: > 
+        node_status == "ready" and inventory_hostname in groups['leader'] 
+
+    # - name: Ensure the nodes need to removed are present in temporary file
+    #   local_action:
+    #     module: copy
+    #     content: "{{ command_result.stdout_lines | select('search', ansible_ssh_host + ':' + redis_port|string) }}"
+    #     dest: /tmp/node-removal
+    #   when: >
+    #     node_status == 'remove'
+    - name: Create the Json file with the remove and ready redis node 
+      ansible.builtin.template:
+        src: node.json.j2
+        dest: /tmp/node.json
+      delegate_to: 127.0.0.1
+        
+    - name:  Reshard the Node to be removed 
+      command : |-
+        {{ redis_command }} --cluster reshard {{ansible_ssh_host}}:{{redis_port}} 
+        --cluster-from {{item.removenode.split(' ')[0]}} 
+        --cluster-to {{ item.presentnode }} 
+        --cluster-slots  {{ redis_slots }}
+        --cluster-yes
       when: >
-        node_status == 'remove'
+        node_status == 'remove' and inventory_hostname in groups['leader']
+      with_items: 
+        - "{{ lookup('file', '/tmp/node.json') | from_json }}"
 
     - name: Ensuring the removed marked nodes are not part of the cluster
       command: |-
@@ -43,9 +67,14 @@
       when: >
         inventory_hostname in groups['leader'][0] and
         lookup('file', '/tmp/node-removal')|length > 0
+        
+    - name: Rebalance the Redis cluster
+      command: |- 
+        redis-cli -h  {{ansible_ssh_host}}  -p {{redis_port}} -a {{redis_password}}  --cluster rebalance {{ansible_ssh_host}}:{{redis_port}}
+      when: node_status == "ready" and inventory_hostname in groups['leader']
 
     - name: Ensuring the temporary file is removed after execution
       local_action:
         module: file
-        path: /tmp/node-removal
+        path: /tmp/node.json
         state: absent

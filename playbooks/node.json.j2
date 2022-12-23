@@ -1,0 +1,5 @@
+{
+    "removenode" : "{{ command_result.stdout_lines | select('search', ansible_ssh_host + ':' + redis_port|string) }}",
+    "presentnode" : "{{ transfer_node_id.stdout }}"
+}
+
