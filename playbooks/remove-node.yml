@@ -34,24 +34,6 @@
         {{ redis_command }} cluster nodes
       register: command_result       
     
-    # - name: Check the Node id of the remove node 
-    #   shell: |- 
-    #     redis-cli -h  {{ansible_ssh_host}}  -p {{redis_port}} -a {{redis_password}} cluster myid
-    #   register: register_remove_node_id
-    #   vars:
-    #     remove_node_id : "{{register_remove_node_id.stdout}}"
-    #   when: > 
-    #     node_status == "remove" and inventory_hostname in groups['leader'] 
-
-    # - name: Check the Node id of transfer node
-    #   shell : |-
-    #     redis-cli -h  {{ansible_ssh_host}}  -p {{redis_port}} -a {{redis_password}} cluster myid
-    #   register: register_transfer_node_id
-    #   vars:
-    #     transfer_node_id : "{{register_transfer_node_id.stdout}}"
-    #   when: > 
-    #     node_status == "ready" and inventory_hostname in groups['leader'] 
-
     - name: Ensure the nodes need to removed are present in temporary file
       local_action:
         module: copy
@@ -86,13 +68,6 @@
       with_items: 
         - "{{ lookup('file', '/tmp/node.json') | from_json }}"
 
-    - name: Rebalance the Redis cluster
-      command: |- 
-        redis-cli -h  {{ansible_ssh_host}}  -p {{redis_port}} -a {{redis_password}}  
-        --cluster rebalance {{ansible_ssh_host}}:{{redis_port}}
-      when: >-
-        node_status == "ready" and inventory_hostname in groups['leader']
-
     - name: Ensuring the removed marked nodes are not part of the cluster
       command: |-
         {{ redis_command }} --cluster del-node
@@ -102,6 +77,13 @@
       when: >
         inventory_hostname in groups['leader'][0] and
         lookup('file', '/tmp/node.json')|length > 0
+    
+    - name: Rebalance the Redis cluster
+      command: |- 
+        redis-cli -h  {{ansible_ssh_host}}  -p {{redis_port}} -a {{redis_password}}  
+        --cluster rebalance {{ansible_ssh_host}}:{{redis_port}}
+      when: >-
+        node_status == "ready" and inventory_hostname in groups['leader'][0]
         
     - name: Ensuring the temporary file is removed after execution
       local_action:
