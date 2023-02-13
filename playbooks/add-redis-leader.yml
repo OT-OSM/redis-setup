@@ -24,3 +24,10 @@
   when: >
     inventory_hostname in groups['leader'][0] and
     new_leader_node not in command_result.stdout
+
+- name: Rebalance the Redis cluster
+  command: |- 
+    {{redis_command}}  
+    --cluster rebalance {{ansible_ssh_host}}:{{redis_port}}
+  when: >-
+    node_status == "ready" and inventory_hostname in groups['leader'][0]
