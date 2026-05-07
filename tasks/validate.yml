@@ -19,3 +19,10 @@
   when:
     - redis_mode == "replication"
     - redis_role == "replica"
+
+- name: Validate ACL users
+  assert:
+    that:
+      - redis_acl_users | length > 0
+    fail_msg: "redis_acl_users must be defined when redis_acl_enabled=true"
+  when: redis_acl_enabled

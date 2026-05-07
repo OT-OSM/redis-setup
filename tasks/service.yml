@@ -17,6 +17,12 @@
     name: "{{ redis_instance_service }}"
     enabled: yes
 
+- name: Stop existing Redis instance if running
+  systemd:
+    name: "{{ redis_instance_service }}"
+    state: stopped
+  failed_when: false
+
 - name: Start Redis instance
   systemd:
     name: "{{ redis_instance_service }}"

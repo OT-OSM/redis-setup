@@ -1,0 +1,9 @@
+- name: Deploy Redis ACL file
+  template:
+    src: users.acl.j2
+    dest: "{{ redis_acl_file }}"
+    owner: redis
+    group: redis
+    mode: '0640'
+  notify:
+    - Restart Redis
