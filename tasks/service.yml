@@ -1,0 +1,23 @@
+- name: Deploy Redis systemd service
+  template:
+    src: redis-systemd.service.j2
+    dest: "/etc/systemd/system/{{ redis_instance_service }}.service"
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - Reload systemd
+    - Restart Redis
+
+- name: Flush handlers
+  meta: flush_handlers
+
+- name: Enable Redis instance service
+  systemd:
+    name: "{{ redis_instance_service }}"
+    enabled: yes
+
+- name: Start Redis instance
+  systemd:
+    name: "{{ redis_instance_service }}"
+    state: started

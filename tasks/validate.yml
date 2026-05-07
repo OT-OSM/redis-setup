@@ -1,0 +1,21 @@
+- name: Validate redis_mode
+  assert:
+    that:
+      - redis_mode in ['standalone', 'replication']
+    fail_msg: "redis_mode must be standalone or replication"
+
+- name: Validate redis_role
+  assert:
+    that:
+      - redis_role in ['master', 'replica']
+    fail_msg: "redis_role must be master or replica"
+  when: redis_mode == "replication"
+
+- name: Validate replica configuration
+  assert:
+    that:
+      - redis_master_ip | length > 0
+    fail_msg: "redis_master_ip is required for replica"
+  when:
+    - redis_mode == "replication"
+    - redis_role == "replica"

@@ -1,0 +1,32 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for redis
+#SPDX-License-Identifier: MIT-0
+---
+# Deployment mode
+redis_mode: "standalone"     # standalone | replication
+
+# Redis instance settings
+redis_port: 6379
+redis_bind: "0.0.0.0"
+
+# Authentication
+redis_requirepass: false
+redis_password: ""
+
+# Performance
+redis_maxmemory: "256mb"
+redis_appendonly: "yes"
+
+# Replication settings
+redis_role: "master"         # master | replica
+redis_master_ip: ""
+redis_master_port: 6379
+
+# Paths
+redis_conf_path: "/etc/redis/redis-{{ redis_port }}.conf"
+redis_data_dir: "/var/lib/redis-{{ redis_port }}"
+redis_log_file: "/var/log/redis/redis-{{ redis_port }}.log"
+
+# Service
+redis_instance_service: "redis-{{ redis_port }}"

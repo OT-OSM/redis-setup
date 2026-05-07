@@ -1,0 +1,26 @@
+bind {{ redis_bind }}
+port {{ redis_port }}
+
+protected-mode no
+
+dir {{ redis_data_dir }}
+
+daemonize no
+supervised systemd
+
+{% if redis_requirepass %}
+requirepass {{ redis_password }}
+{% endif %}
+
+maxmemory {{ redis_maxmemory }}
+appendonly {{ redis_appendonly }}
+
+logfile {{ redis_log_file }}
+
+{% if redis_mode == "replication" and redis_role == "replica" %}
+replicaof {{ redis_master_ip }} {{ redis_master_port }}
+{% endif %}
+
+{% if redis_mode == "replication" and redis_role == "replica" and redis_requirepass %}
+masterauth {{ redis_password }}
+{% endif %}

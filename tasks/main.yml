@@ -1,0 +1,11 @@
+- name: Validate Redis Variables
+  include_tasks: validate.yml
+
+- name: Install Redis
+  include_tasks: install.yml
+
+- name: Configure Redis
+  include_tasks: config.yml
+
+- name: Configure Redis Service
+  include_tasks: service.yml
