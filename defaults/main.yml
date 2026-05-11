@@ -1,5 +1,3 @@
-#SPDX-License-Identifier: MIT-0
----
 # defaults file for redis
 #SPDX-License-Identifier: MIT-0
 ---
@@ -30,3 +28,13 @@ redis_log_file: "/var/log/redis/redis-{{ redis_port }}.log"
 
 # Service
 redis_instance_service: "redis-{{ redis_port }}"
+
+
+# Persistence
+
+redis_save:
+  - "900 1"
+  - "300 10"
+  - "60 10000"
+
+redis_appendfsync: "everysec"

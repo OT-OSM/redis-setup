@@ -15,6 +15,12 @@ requirepass {{ redis_password }}
 maxmemory {{ redis_maxmemory }}
 appendonly {{ redis_appendonly }}
 
+appendfsync {{ redis_appendfsync }}
+
+{% for item in redis_save %}
+save {{ item }}
+{% endfor %}
+
 logfile {{ redis_log_file }}
 
 {% if redis_mode == "replication" and redis_role == "replica" %}

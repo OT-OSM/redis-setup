@@ -19,3 +19,9 @@
   when:
     - redis_mode == "replication"
     - redis_role == "replica"
+
+- name: Validate appendfsync policy
+  assert:
+    that:
+      - redis_appendfsync in ['always', 'everysec', 'no']
+    fail_msg: "redis_appendfsync must be always, everysec, or no"
