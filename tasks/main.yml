@@ -9,3 +9,6 @@
 
 - name: Configure Redis Service
   include_tasks: service.yml
+
+- name: Validate Redis Health
+  include_tasks: healthcheck.yml
