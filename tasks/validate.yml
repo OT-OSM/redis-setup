@@ -19,3 +19,10 @@
   when:
     - redis_mode == "replication"
     - redis_role == "replica"
+
+- name: Validate Sentinel configuration
+  assert:
+    that:
+      - redis_master_ip | length > 0
+    fail_msg: "redis_master_ip is required when redis_sentinel_enabled=true"
+  when: redis_sentinel_enabled

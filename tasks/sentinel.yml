@@ -1,0 +1,49 @@
+- name: Ensure Redis Sentinel directory exists
+  file:
+    path: "{{ redis_sentinel_dir }}"
+    state: directory
+    owner: redis
+    group: redis
+    mode: '0755'
+
+- name: Ensure Sentinel log file exists
+  file:
+    path: "/var/log/redis/sentinel-{{ redis_sentinel_port }}.log"
+    state: touch
+    owner: redis
+    group: redis
+    mode: '0644'
+
+- name: Deploy Redis Sentinel configuration
+  template:
+    src: sentinel.conf.j2
+    dest: "/etc/redis/sentinel-{{ redis_sentinel_port }}.conf"
+    owner: redis
+    group: redis
+    mode: '0644'
+  notify:
+    - Restart Redis Sentinel
+
+- name: Deploy Redis Sentinel systemd service
+  template:
+    src: redis-sentinel.service.j2
+    dest: "/etc/systemd/system/redis-sentinel-{{ redis_sentinel_port }}.service"
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - Reload systemd
+    - Restart Redis Sentinel
+
+- name: Flush handlers
+  meta: flush_handlers
+
+- name: Enable Redis Sentinel service
+  systemd:
+    name: "redis-sentinel-{{ redis_sentinel_port }}"
+    enabled: yes
+
+- name: Start Redis Sentinel service
+  systemd:
+    name: "redis-sentinel-{{ redis_sentinel_port }}"
+    state: started

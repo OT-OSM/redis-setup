@@ -1,8 +1,5 @@
 #SPDX-License-Identifier: MIT-0
 ---
-# defaults file for redis
-#SPDX-License-Identifier: MIT-0
----
 # Deployment mode
 redis_mode: "standalone"     # standalone | replication
 
@@ -30,3 +27,18 @@ redis_log_file: "/var/log/redis/redis-{{ redis_port }}.log"
 
 # Service
 redis_instance_service: "redis-{{ redis_port }}"
+
+# Sentinel Configuration
+redis_sentinel_enabled: false
+redis_sentinel_port: 26379
+redis_sentinel_monitor_name: "mymaster"
+redis_sentinel_quorum: 2
+redis_sentinel_down_after_milliseconds: 5000
+redis_sentinel_failover_timeout: 60000
+
+redis_sentinel_dir: "/var/lib/redis-sentinel"
+
+# Sentinel Authentication
+redis_sentinel_auth_user: ""
+
+redis_sentinel_auth_pass: ""

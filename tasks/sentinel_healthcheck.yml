@@ -1,0 +1,19 @@
+- name: Verify Redis Sentinel ping
+  command: "redis-cli -p {{ redis_sentinel_port }} ping"
+  register: sentinel_ping
+  changed_when: false
+
+- name: Fail if Sentinel is not responding
+  fail:
+    msg: "Redis Sentinel is not responding"
+  when: "'PONG' not in sentinel_ping.stdout"
+
+- name: Gather Sentinel master information
+  command: "redis-cli -p {{ redis_sentinel_port }} sentinel masters"
+  register: sentinel_master_info
+  changed_when: false
+
+- name: Fail if Sentinel is not monitoring master
+  fail:
+    msg: "Redis Sentinel is not monitoring the configured master"
+  when: redis_sentinel_monitor_name not in sentinel_master_info.stdout
