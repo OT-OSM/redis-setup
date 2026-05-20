@@ -9,8 +9,6 @@
     - Reload systemd
     - Restart Redis
 
-- name: Flush handlers
-  meta: flush_handlers
 
 - name: Enable Redis instance service
   systemd:

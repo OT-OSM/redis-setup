@@ -1,0 +1,18 @@
+
+- name: Check cluster status
+  command: "redis-cli -p {{ redis_port }} cluster info"
+  register: redis_cluster_status
+  failed_when: false
+  changed_when: false
+
+- name: Create Redis Cluster
+  command: >
+    redis-cli --cluster create
+    {{ redis_cluster_nodes | join(' ') }}
+    --cluster-replicas 1
+    --cluster-yes
+  when:
+    - redis_cluster_create
+    - "'cluster_state:ok' not in redis_cluster_status.stdout"
+  run_once: true
+

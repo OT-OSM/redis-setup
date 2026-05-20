@@ -9,3 +9,11 @@
 
 - name: Configure Redis Service
   include_tasks: service.yml
+
+
+- name: Configure Redis Cluster
+  include_tasks: cluster.yml
+  when:
+    - redis_mode == "cluster"
+    - redis_cluster_enabled
+

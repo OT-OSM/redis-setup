@@ -1,7 +1,7 @@
 - name: Validate redis_mode
   assert:
     that:
-      - redis_mode in ['standalone', 'replication']
+      - redis_mode in ['standalone', 'replication', 'cluster']
     fail_msg: "redis_mode must be standalone or replication"
 
 - name: Validate redis_role

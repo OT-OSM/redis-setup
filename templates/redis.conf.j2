@@ -24,3 +24,19 @@ replicaof {{ redis_master_ip }} {{ redis_master_port }}
 {% if redis_mode == "replication" and redis_role == "replica" and redis_requirepass %}
 masterauth {{ redis_password }}
 {% endif %}
+
+{% if redis_mode == "cluster" and redis_cluster_enabled %}
+
+cluster-enabled yes
+
+cluster-config-file {{ redis_cluster_config_file }}
+
+cluster-node-timeout {{ redis_cluster_node_timeout }}
+
+cluster-announce-ip {{ redis_cluster_announce_ip }}
+
+cluster-announce-port {{ redis_cluster_announce_port }}
+
+cluster-announce-bus-port {{ redis_cluster_announce_bus_port }}
+
+{% endif %}
