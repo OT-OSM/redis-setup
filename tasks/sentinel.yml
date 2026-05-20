@@ -8,7 +8,7 @@
 
 - name: Ensure Sentinel log file exists
   file:
-    path: "/var/log/redis/sentinel-{{ redis_sentinel_port }}.log"
+    path: "/var/log/redis/sentinel.log"
     state: touch
     owner: redis
     group: redis
@@ -17,7 +17,7 @@
 - name: Deploy Redis Sentinel configuration
   template:
     src: sentinel.conf.j2
-    dest: "/etc/redis/sentinel-{{ redis_sentinel_port }}.conf"
+    dest: "/etc/redis/sentinel.conf"
     owner: redis
     group: redis
     mode: '0644'
@@ -27,7 +27,7 @@
 - name: Deploy Redis Sentinel systemd service
   template:
     src: redis-sentinel.service.j2
-    dest: "/etc/systemd/system/redis-sentinel-{{ redis_sentinel_port }}.service"
+    dest: "/etc/systemd/system/{{ redis_sentinel_service_name }}.service"
     owner: root
     group: root
     mode: '0644'
@@ -40,10 +40,10 @@
 
 - name: Enable Redis Sentinel service
   systemd:
-    name: "redis-sentinel-{{ redis_sentinel_port }}"
+    name: "{{ redis_sentinel_service_name }}"
     enabled: yes
 
 - name: Start Redis Sentinel service
   systemd:
-    name: "redis-sentinel-{{ redis_sentinel_port }}"
+    name: "{{ redis_sentinel_service_name }}"
     state: started

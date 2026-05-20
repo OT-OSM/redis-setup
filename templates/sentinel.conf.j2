@@ -17,6 +17,6 @@ sentinel down-after-milliseconds {{ redis_sentinel_monitor_name }} {{ redis_sent
 
 sentinel failover-timeout {{ redis_sentinel_monitor_name }} {{ redis_sentinel_failover_timeout }}
 
-logfile /var/log/redis/sentinel-{{ redis_sentinel_port }}.log
+logfile /var/log/redis/sentinel.log
 
 protected-mode no

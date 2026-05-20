@@ -7,7 +7,7 @@ Type=simple
 User=redis
 Group=redis
 
-ExecStart=/usr/bin/redis-server /etc/redis/sentinel-{{ redis_sentinel_port }}.conf --sentinel
+ExecStart=/usr/bin/redis-server /etc/redis/sentinel.conf --sentinel
 
 Restart=always
 RestartSec=5
