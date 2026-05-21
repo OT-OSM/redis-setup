@@ -1,3 +1,5 @@
+bind {{ redis_bind }}
+
 port {{ redis_sentinel_port }}
 
 dir {{ redis_sentinel_dir }}
@@ -19,4 +21,4 @@ sentinel failover-timeout {{ redis_sentinel_monitor_name }} {{ redis_sentinel_fa
 
 logfile /var/log/redis/sentinel.log
 
-protected-mode no
+protected-mode {{ redis_sentinel_protected_mode }}

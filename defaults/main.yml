@@ -57,6 +57,7 @@ redis_cluster_node_timeout: 5000
 redis_cluster_announce_ip: "{{ ansible_default_ipv4.address }}"
 
 # Sentinel Configuration
+redis_sentinel_protected_mode: "yes"
 redis_sentinel_enabled: false
 redis_sentinel_port: 26379
 redis_sentinel_monitor_name: "mymaster"
