@@ -30,23 +30,15 @@ redis_log_file: "/var/log/redis/redis-{{ redis_port }}.log"
 redis_instance_service: "redis-{{ redis_port }}"
 
 
+
 # Cluster Configuration
 redis_cluster_enabled: false
 
-redis_cluster_config_file: "nodes-{{ redis_port }}.conf"
+redis_cluster_config_file: "nodes.conf"
 
 redis_cluster_node_timeout: 5000
 
-redis_cluster_announce_ip: "{{ redis_bind }}"
-
-redis_cluster_announce_port: "{{ redis_port }}"
-
-redis_cluster_announce_bus_port: "{{ redis_port | int + 10000 }}"
+redis_cluster_announce_ip: "{{ ansible_default_ipv4.address }}"
 
 
-
-# Cluster Bootstrap Configuration
-redis_cluster_create: false
-
-redis_cluster_nodes: []
 
