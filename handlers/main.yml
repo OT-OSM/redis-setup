@@ -6,3 +6,10 @@
 - name: Reload systemd
   systemd:
     daemon_reload: yes
+
+
+- name: Restart Redis Sentinel
+  systemd:
+    name: "{{ redis_sentinel_service_name }}"
+    state: restarted
+

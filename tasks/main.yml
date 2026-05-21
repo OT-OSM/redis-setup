@@ -14,5 +14,14 @@
 - name: Configure Redis Service
   include_tasks: service.yml
 
-- name: Validate Redis Health
+- name: Configure Redis Sentinel
+  include_tasks: sentinel.yml
+  when: redis_sentinel_enabled
+
+- name: Validate Redis Sentinel
+  include_tasks: sentinel_healthcheck.yml
+  when: redis_sentinel_enabled
+
+- name: Validate Redis Runtime Health
   include_tasks: runtime_validation.yml
+
