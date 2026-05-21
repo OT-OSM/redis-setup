@@ -1,38 +1,90 @@
-Role Name
-=========
+# OSM Redis Setup
 
-A brief description of the role goes here.
+OSM Redis Setup is a bundle of roles, playbooks, and inventories to set up different modes of redis like- standalone, sharded cluster, and replicated cluster, along with sentinel to handle fail-over. This ansible automation doesn't restrict to setting up any environment once, but also it can be used for change management, upgrading, and scaling the environment.
 
-Requirements
-------------
+## Documentation
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+- [Redis standalone](docs/01_standalone.md)
+- [Redis sharded cluster](docs/02_sharded-cluster.md)
+  - [Adding node](docs/02_sharded-cluster.md#adding-node-in-cluster)
+  - [Removing node](docs/02_sharded-cluster.md#removing-node-from-cluster)
+- [Redis replication cluster](docs/05_replicated-cluster.md)
+  - [Sentinel integration](docs/06_sentinel-integration.md)
 
-Role Variables
---------------
+## Supported Features
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+Here the features which are supported by this automation:
 
-Dependencies
-------------
+- [Redis standalone setup](https://redis.io/docs/getting-started/)
+- [Redis sharded cluster setup](https://redis.io/docs/management/scaling/)
+- [Redis replication cluster setup](https://redis.io/docs/management/replication/)
+- [Sentinel mode](https://redis.io/docs/management/sentinel/)
+- [Redis monitoring with exporter](https://github.com/oliver006/redis_exporter)
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+Along with these features, the redis ansible automation supports the on-fly scaling and de-scaling of redis cluster with automatic re-sharding.
 
-Example Playbook
-----------------
+## Supported Platforms
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+- Debian 10.X
+- Ubuntu 18.04
+- Ubuntu 20.04
+- Ubuntu 22.04
+- RedHat and Centos 7
+- RedHat and Centos 8
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+## Important Role Variables
 
-License
--------
+| **Variable Name**        | **Default Value** | **Description**                                                           |
+|--------------------------|-------------------|---------------------------------------------------------------------------|
+| redis_password           | Opstree@1234      | The redis password for authentication purpose                             |
+| redis_monitoring_enabled | true              | To enable redis monitoring with the redis-exporter                        |
+| setup_mode               | sharded           | Setup mode for redis cluster, possible values - `replicated` or `sharded` |
+| leader_redis_port        | 6379              | The listen port of redis leader to listen traffic                         |
+| follower_redis_port      | 6380              | The listen port of redis follower to listen traffic                       |
+| redis_sentinel_port      | 23679             | The redis sentinel port to listen traffic                                 |
 
-BSD
+The defined variables in the table are not only variables in the automation. There are other optional environment variables that can be configured or changed as per the user's requirement. The other environment variables are:
 
-Author Information
-------------------
+- [Redis Variables](roles/redis/defaults)
+- [Redis Cluster Variables](roles/redis-cluster/defaults)
+- [Redis Sentinel Variables](roles/sentinel/defaults)
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+### Default Properties
+
+#### Ports
+
+| **Port** | **Description**                  |
+|----------|----------------------------------|
+| 6379     | Redis standalone and leader port |
+| 6380     | Redis follower port              |
+| 26379    | Redis sentinel port              |
+
+#### Directories and files
+
+| **Directory and Files**                  | **Description**                                             |
+|------------------------------------------|-------------------------------------------------------------|
+| `/etc/redis/redis.conf`                  | Redis standalone configuration file                         |
+| `/opt/redis/data`                        | Data directory for storing rdb files for redis standalone   |
+| `/var/log/redis/redis.log`               | Log file where redis standalone service logs will be stored |
+| `/etc/redis/cluster/leader/redis.conf`   | Redis leader configuration file                             |
+| `/var/log/redis/leader/redis.log`        | Log file for redis leader service logs                      |
+| `/var/lib/redis/leader`                  | Data directory for storing rdb files for redis leader       |
+| `/etc/redis/cluster/follower/redis.conf` | Redis follower configuration file                           |
+| `/var/log/redis/follower/redis.log`      | Log file for redis follower service logs                    |
+| `/var/lib/redis/follower`                | Data directory for storing rdb files for redis follower     |
+
+#### Systemd services
+
+| **Service Name**                | **Description**                           |
+|---------------------------------|-------------------------------------------|
+| redis.service                   | Redis standalone systemd service          |
+| redis-exporter.service          | Redis exporter standalone systemd service |
+| redis-leader.service            | Redis leader systemd service              |
+| redis-follower.service          | Redis follower systemd service            |
+| redis-sentinel.service          | Redis sentinel systemd service            |
+| redis-leader-exporter.service   | Redis exporter leader systemd service     |
+| redis-follower-exporter.service | Redis exporter follower systemd service   |
+
+## Contact Information
+
+This project is managed by [OpsTree Solutions](http://opstree.com). If you have any queries or suggestions, mail us at [opensource@opstree.com](mailto:opensource@opstree.com).

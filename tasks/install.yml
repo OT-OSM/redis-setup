@@ -1,9 +1,0 @@
-- name: Update apt cache (Debian)
-  apt:
-    update_cache: yes
-  when: ansible_os_family == "Debian"
-
-- name: Install Redis package
-  package:
-    name: "{{ redis_package_name }}"
-    state: present
