@@ -7,5 +7,9 @@
 - name: Configure Redis
   include_tasks: config.yml
 
+- name: Configure Redis ACL
+  include_tasks: acl.yml
+  when: redis_acl_enabled
+
 - name: Configure Redis Service
   include_tasks: service.yml

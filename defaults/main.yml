@@ -1,8 +1,5 @@
 #SPDX-License-Identifier: MIT-0
 ---
-# defaults file for redis
-#SPDX-License-Identifier: MIT-0
----
 # Deployment mode
 redis_mode: "standalone"     # standalone | replication
 
@@ -30,3 +27,10 @@ redis_log_file: "/var/log/redis/redis-{{ redis_port }}.log"
 
 # Service
 redis_instance_service: "redis-{{ redis_port }}"
+
+# ACL Configuration
+redis_acl_enabled: false
+
+redis_acl_file: "/etc/redis/users-{{ redis_port }}.acl"
+
+redis_acl_users: []
