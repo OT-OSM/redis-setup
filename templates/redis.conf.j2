@@ -1,0 +1,36 @@
+bind {{ redis_bind }}
+port {{ redis_port }}
+
+protected-mode {{ redis_protected_mode }}
+
+dir {{ redis_data_dir }}
+
+daemonize no
+supervised systemd
+
+{% if redis_requirepass and not redis_acl_enabled %}
+requirepass {{ redis_password }}
+{% endif %}
+
+{% if redis_acl_enabled %}
+aclfile {{ redis_acl_file }}
+{% endif %}
+
+maxmemory {{ redis_maxmemory }}
+appendonly {{ redis_appendonly }}
+
+appendfsync {{ redis_appendfsync }}
+
+{% for item in redis_save %}
+save {{ item }}
+{% endfor %}
+
+logfile {{ redis_log_file }}
+
+{% if redis_mode == "replication" and redis_role == "replica" %}
+replicaof {{ redis_master_ip }} {{ redis_master_port }}
+{% endif %}
+
+{% if redis_mode == "replication" and redis_role == "replica" and redis_requirepass %}
+masterauth {{ redis_password }}
+{% endif %}

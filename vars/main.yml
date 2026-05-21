@@ -1,0 +1,4 @@
+#SPDX-License-Identifier: MIT-0
+---
+# vars file for redis
+redis_package_name: "{{ 'redis-server' if ansible_os_family == 'Debian' else 'redis' }}"

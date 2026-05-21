@@ -1,0 +1,51 @@
+- name: Verify Redis Ping
+  command: >
+    redis-cli
+    -h {{ redis_bind }}
+    -p {{ redis_port }}
+    {% if redis_requirepass %}
+    -a {{ redis_password }}
+    {% endif %}
+    ping
+  register: redis_ping
+  changed_when: false
+  no_log: "{{ redis_requirepass }}"
+
+- name: Fail if Redis is not responding
+  fail:
+    msg: "Redis is not responding on port {{ redis_port }}"
+  when: "'PONG' not in redis_ping.stdout"
+
+- name: Gather Redis service status
+  systemd:
+    name: "{{ redis_instance_service }}"
+  register: redis_service_status
+
+- name: Fail if Redis service is not active
+  fail:
+    msg: "Redis service is not active"
+  when: redis_service_status.status.ActiveState != "active"
+
+- name: Gather Redis replication info
+  command: >
+    redis-cli
+    -h {{ redis_bind }}
+    -p {{ redis_port }}
+    {% if redis_requirepass %}
+    -a {{ redis_password }}
+    {% endif %}
+    info replication
+  register: redis_replication_info
+  changed_when: false
+  no_log: "{{ redis_requirepass }}"
+  when:
+    - redis_mode == "replication"
+    - redis_role == "replica"
+
+- name: Fail if replica is not connected to master
+  fail:
+    msg: "Redis replica is not connected to master"
+  when:
+    - redis_mode == "replication"
+    - redis_role == "replica"
+    - "'master_link_status:up' not in redis_replication_info.stdout"
