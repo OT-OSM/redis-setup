@@ -8,7 +8,8 @@ redis_mode: "standalone"     # standalone | replication | cluster
 
 # Redis instance settings
 redis_port: 6379
-redis_bind: "0.0.0.0"
+redis_bind: "127.0.0.1"
+redis_protected_mode: "yes"
 
 # Authentication
 redis_requirepass: false
@@ -24,12 +25,12 @@ redis_master_ip: ""
 redis_master_port: 6379
 
 # Paths
-redis_conf_path: "/etc/redis/redis-{{ redis_port }}.conf"
-redis_data_dir: "/var/lib/redis-{{ redis_port }}"
-redis_log_file: "/var/log/redis/redis-{{ redis_port }}.log"
+redis_conf_path: "/etc/redis/redis.conf"
+redis_data_dir: "/var/lib/redis"
+redis_log_file: "/var/log/redis/redis.log"
 
 # Service
-redis_instance_service: "redis-{{ redis_port }}"
+redis_instance_service: "redis"
 
 # Persistence
 redis_save:
@@ -42,7 +43,7 @@ redis_appendfsync: "everysec"
 # ACL Configuration
 redis_acl_enabled: false
 
-redis_acl_file: "/etc/redis/users-{{ redis_port }}.acl"
+redis_acl_file: "/etc/redis/users.acl"
 
 redis_acl_users: []
 

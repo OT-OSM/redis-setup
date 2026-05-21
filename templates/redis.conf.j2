@@ -1,7 +1,7 @@
 bind {{ redis_bind }}
 port {{ redis_port }}
 
-protected-mode no
+protected-mode {{ redis_protected_mode }}
 
 dir {{ redis_data_dir }}
 

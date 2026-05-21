@@ -1,7 +1,15 @@
 - name: Verify Redis Ping
-  command: "redis-cli -p {{ redis_port }} ping"
+  command: >
+    redis-cli
+    -h {{ redis_bind }}
+    -p {{ redis_port }}
+    {% if redis_requirepass %}
+    -a {{ redis_password }}
+    {% endif %}
+    ping
   register: redis_ping
   changed_when: false
+  no_log: "{{ redis_requirepass }}"
 
 - name: Fail if Redis is not responding
   fail:
@@ -19,9 +27,17 @@
   when: redis_service_status.status.ActiveState != "active"
 
 - name: Gather Redis replication info
-  command: "redis-cli -p {{ redis_port }} info replication"
+  command: >
+    redis-cli
+    -h {{ redis_bind }}
+    -p {{ redis_port }}
+    {% if redis_requirepass %}
+    -a {{ redis_password }}
+    {% endif %}
+    info replication
   register: redis_replication_info
   changed_when: false
+  no_log: "{{ redis_requirepass }}"
   when:
     - redis_mode == "replication"
     - redis_role == "replica"

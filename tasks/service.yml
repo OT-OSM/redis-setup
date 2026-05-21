@@ -1,3 +1,4 @@
+
 - name: Deploy Redis systemd service
   template:
     src: redis-systemd.service.j2
@@ -12,12 +13,13 @@
 - name: Flush handlers
   meta: flush_handlers
 
-- name: Enable Redis instance service
+- name: Enable Redis service
   systemd:
     name: "{{ redis_instance_service }}"
     enabled: yes
 
-- name: Start Redis instance
+- name: Start Redis service
   systemd:
     name: "{{ redis_instance_service }}"
     state: started
+

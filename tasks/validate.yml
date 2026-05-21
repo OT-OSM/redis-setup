@@ -40,3 +40,10 @@
     fail_msg: "redis_acl_users must be defined when redis_acl_enabled=true"
   when: redis_acl_enabled
 
+
+- name: Validate ACL and requirepass configuration
+  assert:
+    that:
+      - not (redis_acl_enabled and redis_requirepass)
+    fail_msg: "redis_requirepass should not be used when redis_acl_enabled=true"
+

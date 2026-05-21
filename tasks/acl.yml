@@ -1,4 +1,12 @@
- - name: Deploy Redis ACL file
+- name: Ensure Redis ACL directory exists
+  ansible.builtin.file:
+    path: "/etc/redis"
+    state: directory
+    owner: redis
+    group: redis
+    mode: '0755'
+
+- name: Deploy Redis ACL file
   ansible.builtin.template:
     src: users.acl.j2
     dest: "{{ redis_acl_file }}"
