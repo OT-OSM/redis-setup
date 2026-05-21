@@ -1,8 +1,8 @@
 - name: Validate redis_mode
   assert:
     that:
-      - redis_mode in ['standalone', 'replication']
-    fail_msg: "redis_mode must be standalone or replication"
+      - redis_mode in ['standalone', 'replication', 'cluster']
+    fail_msg: "redis_mode must be standalone, replication, or cluster"
 
 - name: Validate redis_role
   assert:
@@ -26,3 +26,17 @@
       - redis_master_ip | length > 0
     fail_msg: "redis_master_ip is required when redis_sentinel_enabled=true"
   when: redis_sentinel_enabled
+
+- name: Validate appendfsync policy
+  assert:
+    that:
+      - redis_appendfsync in ['always', 'everysec', 'no']
+    fail_msg: "redis_appendfsync must be always, everysec, or no"
+
+- name: Validate ACL users
+  assert:
+    that:
+      - redis_acl_users | length > 0
+    fail_msg: "redis_acl_users must be defined when redis_acl_enabled=true"
+  when: redis_acl_enabled
+

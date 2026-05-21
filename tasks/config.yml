@@ -6,6 +6,13 @@
     group: redis
     mode: '0755'
 
+- name: Ensure Redis data directory ownership
+  file:
+    path: "{{ redis_data_dir }}"
+    owner: redis
+    group: redis
+    recurse: yes
+
 - name: Ensure Redis log directory exists
   file:
     path: "/var/log/redis"
@@ -13,6 +20,14 @@
     owner: redis
     group: redis
     mode: '0755'
+
+- name: Ensure Redis log file exists
+  file:
+    path: "{{ redis_log_file }}"
+    state: touch
+    owner: redis
+    group: redis
+    mode: '0644'
 
 - name: Deploy Redis configuration
   template:
@@ -23,3 +38,4 @@
     mode: '0644'
   notify:
     - Restart Redis
+

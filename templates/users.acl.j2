@@ -1,0 +1,3 @@
+{% for user in redis_acl_users %}
+user {{ user.username }} on >{{ user.password }} {{ user.permissions | join(' ') }}
+{% endfor %}

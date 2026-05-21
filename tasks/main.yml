@@ -7,6 +7,10 @@
 - name: Configure Redis
   include_tasks: config.yml
 
+- name: Configure Redis ACL
+  include_tasks: acl.yml
+  when: redis_acl_enabled
+
 - name: Configure Redis Service
   include_tasks: service.yml
 
@@ -17,3 +21,7 @@
 - name: Validate Redis Sentinel
   include_tasks: sentinel_healthcheck.yml
   when: redis_sentinel_enabled
+
+- name: Validate Redis Runtime Health
+  include_tasks: runtime_validation.yml
+

@@ -8,12 +8,22 @@ dir {{ redis_data_dir }}
 daemonize no
 supervised systemd
 
-{% if redis_requirepass %}
+{% if redis_requirepass and not redis_acl_enabled %}
 requirepass {{ redis_password }}
+{% endif %}
+
+{% if redis_acl_enabled %}
+aclfile {{ redis_acl_file }}
 {% endif %}
 
 maxmemory {{ redis_maxmemory }}
 appendonly {{ redis_appendonly }}
+
+appendfsync {{ redis_appendfsync }}
+
+{% for item in redis_save %}
+save {{ item }}
+{% endfor %}
 
 logfile {{ redis_log_file }}
 
