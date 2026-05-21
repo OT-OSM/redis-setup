@@ -1,7 +1,10 @@
+
+# defaults file for redis
 #SPDX-License-Identifier: MIT-0
 ---
+
 # Deployment mode
-redis_mode: "standalone"     # standalone | replication
+redis_mode: "standalone"     # standalone | replication | cluster
 
 # Redis instance settings
 redis_port: 6379
@@ -28,9 +31,26 @@ redis_log_file: "/var/log/redis/redis-{{ redis_port }}.log"
 # Service
 redis_instance_service: "redis-{{ redis_port }}"
 
+# Persistence
+redis_save:
+  - "900 1"
+  - "300 10"
+  - "60 10000"
+
+redis_appendfsync: "everysec"
+
 # ACL Configuration
 redis_acl_enabled: false
 
 redis_acl_file: "/etc/redis/users-{{ redis_port }}.acl"
 
 redis_acl_users: []
+
+# Cluster Configuration
+redis_cluster_enabled: false
+
+redis_cluster_config_file: "nodes.conf"
+
+redis_cluster_node_timeout: 5000
+
+redis_cluster_announce_ip: "{{ ansible_default_ipv4.address }}"
